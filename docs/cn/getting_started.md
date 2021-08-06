@@ -1,14 +1,14 @@
-# BUILD
+# 构建
 
 brpc prefers static linkages of deps, so that they don't have to be installed on every machine running the app.
 
-brpc depends on following packages:
+brpc依赖下面的包：
 
 * [gflags](https://github.com/gflags/gflags): Extensively used to define global options.
 * [protobuf](https://github.com/google/protobuf): Serializations of messages, interfaces of services.
 * [leveldb](https://github.com/google/leveldb): Required by [/rpcz](rpcz.md) to record RPCs for tracing.
 
-# Supported Environment
+# 支持的环境
 
 * [Ubuntu/LinuxMint/WSL](#ubuntulinuxmintwsl)
 * [Fedora/CentOS](#fedoracentos)
@@ -16,14 +16,14 @@ brpc depends on following packages:
 * [MacOS](#macos)
 
 ## Ubuntu/LinuxMint/WSL
-### Prepare deps
+### 依赖准备
 
-Install common deps, [gflags](https://github.com/gflags/gflags), [protobuf](https://github.com/google/protobuf), [leveldb](https://github.com/google/leveldb):
+安装通用依赖， [gflags](https://github.com/gflags/gflags), [protobuf](https://github.com/google/protobuf), [leveldb](https://github.com/google/leveldb):
 ```shell
 sudo apt-get install -y git g++ make libssl-dev libgflags-dev libprotobuf-dev libprotoc-dev protobuf-compiler libleveldb-dev
 ```
 
-If you need to statically link leveldb:
+如果你需要静态链接leveldb：
 ```shell
 sudo apt-get install -y libsnappy-dev
 ```
@@ -39,21 +39,21 @@ sudo apt-get install -y cmake libgtest-dev && cd /usr/src/gtest && sudo cmake . 
 ```
 The directory of gtest source code may be changed, try `/usr/src/googletest/googletest` if `/usr/src/gtest` is not there.
 
-### Compile brpc with config_brpc.sh
-git clone brpc, cd into the repo and run
+### 使用config_brpc.sh编译brpc
+git克隆brpc，进入到项目目录，然后运行
 ```shell
 $ sh config_brpc.sh --headers=/usr/include --libs=/usr/lib
 $ make
 ```
-To change compiler to clang, add `--cxx=clang++ --cc=clang`.
+修改编译器为clang，添加选项 `--cxx=clang++ --cc=clang`。
 
-To not link debugging symbols, add `--nodebugsymbols` and compiled binaries will be much smaller.
+不链接调试符号，添加选项 `--nodebugsymbols` 然后编译将会得到更清亮的二进制文件。
 
-To use brpc with glog, add `--with-glog`.
+使用glog版的brpc，添加选项 `--with-glog`.
 
-To enable [thrift support](../en/thrift.md), install thrift first and add `--with-thrift`.
+要启用 [thrift support](../en/thrift.md)，首先安装thrift并且添加选项 `--with-thrift`。
 
-**Run example**
+**运行样例**
 
 ```shell
 $ cd example/echo_c++
@@ -64,14 +64,14 @@ $ ./echo_client
 
 Examples link brpc statically, if you need to link the shared version, `make clean` and `LINK_SO=1 make`
 
-**Run tests**
+**运行测试**
 ```shell
 $ cd test
 $ make
 $ sh run_tests.sh
 ```
 
-### Compile brpc with cmake
+### 使用cmake编译brpc
 ```shell
 cmake -B build && cmake --build build -j6
 ```
@@ -85,7 +85,7 @@ To use brpc with glog, cmake with `-DWITH_GLOG=ON`.
 
 To enable [thrift support](../en/thrift.md), install thrift first and cmake with `-DWITH_THRIFT=ON`.
 
-**Run example with cmake**
+**用cmake运行样例**
 
 ```shell
 $ cd example/echo_c++
@@ -95,7 +95,7 @@ $ ./echo_client
 ```
 Examples link brpc statically, if you need to link the shared version, remove `CMakeCache.txt` and cmake with `-DLINK_SO=ON`
 
-**Run tests**
+**用cmake运行测试**
 
 ```shell
 $ mkdir build && cd build && cmake -DBUILD_UNIT_TESTS=ON .. && make && make test
@@ -103,119 +103,7 @@ $ mkdir build && cd build && cmake -DBUILD_UNIT_TESTS=ON .. && make && make test
 
 ## Fedora/CentOS
 
-### Prepare deps
-
-CentOS needs to install EPEL generally otherwise many packages are not available by default.
-```shell
-sudo yum install epel-release
-```
-
-Install common deps:
-```shell
-sudo yum install git gcc-c++ make openssl-devel
-```
-
-Install [gflags](https://github.com/gflags/gflags), [protobuf](https://github.com/google/protobuf), [leveldb](https://github.com/google/leveldb):
-```shell
-sudo yum install gflags-devel protobuf-devel protobuf-compiler leveldb-devel
-```
-
-If you need to enable cpu/heap profilers in examples:
-```shell
-sudo yum install gperftools-devel
-```
-
-If you need to run tests, install and compile gtest-devel (which is not compiled yet):
-```shell
-sudo yum install gtest-devel
-```
-
-### Compile brpc with config_brpc.sh
-
-git clone brpc, cd into the repo and run
-
-```shell
-$ sh config_brpc.sh --headers=/usr/include --libs=/usr/lib64
-$ make
-```
-To change compiler to clang, add `--cxx=clang++ --cc=clang`.
-
-To not link debugging symbols, add `--nodebugsymbols` and compiled binaries will be much smaller.
-
-To use brpc with glog, add `--with-glog`.
-
-To enable [thrift support](../en/thrift.md), install thrift first and add `--with-thrift`.
-
-**Run example**
-
-```shell
-$ cd example/echo_c++
-$ make
-$ ./echo_server &
-$ ./echo_client
-```
-
-Examples link brpc statically, if you need to link the shared version, `make clean` and `LINK_SO=1 make`
-
-**Run tests**
-```shell
-$ cd test
-$ make
-$ sh run_tests.sh
-```
-
-### Compile brpc with cmake
-Same with [here](#compile-brpc-with-cmake)
-
-## Linux with self-built deps
-
-### Prepare deps
-
-brpc builds itself to both static and shared libs by default, so it needs static and shared libs of deps to be built as well.
-
-Take [gflags](https://github.com/gflags/gflags) as example, which does not build shared lib by default, you need to pass options to `cmake` to change the behavior:
-```shell
-$ cmake . -DBUILD_SHARED_LIBS=1 -DBUILD_STATIC_LIBS=1
-$ make
-```
-
-### Compile brpc
-
-Keep on with the gflags example, let `../gflags_dev` be where gflags is cloned.
-
-git clone brpc. cd into the repo and run
-
-```shell
-$ sh config_brpc.sh --headers="../gflags_dev /usr/include" --libs="../gflags_dev /usr/lib64"
-$ make
-```
-
-Here we pass multiple paths to `--headers` and `--libs` to make the script search for multiple places. You can also group all deps and brpc into one directory, then pass the directory to --headers/--libs which actually search all subdirectories recursively and will find necessary files.
-
-To change compiler to clang, add `--cxx=clang++ --cc=clang`.
-
-To not link debugging symbols, add `--nodebugsymbols` and compiled binaries will be much smaller.
-
-To use brpc with glog, add `--with-glog`.
-
-To enable [thrift support](../en/thrift.md), install thrift first and add `--with-thrift`.
-
-```shell
-$ ls my_dev
-gflags_dev protobuf_dev leveldb_dev brpc_dev
-$ cd brpc_dev
-$ sh config_brpc.sh --headers=.. --libs=..
-$ make
-```
-
-### Compile brpc with cmake
-Same with [here](#compile-brpc-with-cmake)
-
-## MacOS
-
-Note: In the same running environment, the performance of the current Mac version is about 2.5 times worse than the Linux version. If your service is performance-critical, do not use MacOS as your production environment.
-
-### Prepare deps
+### 依赖准备
 
 Install common deps:
 ```shell
@@ -238,7 +126,7 @@ git clone https://github.com/google/googletest -b release-1.10.0 && cd googletes
 ```
 After the compilation, copy include/ and lib/ into /usr/local/include and /usr/local/lib respectively to expose gtest to all apps
 
-### Compile brpc with config_brpc.sh
+### 使用config_brpc.sh编译brpc
 git clone brpc, cd into the repo and run
 ```shell
 $ sh config_brpc.sh --headers=/usr/local/include --libs=/usr/local/lib --cc=clang --cxx=clang++
@@ -250,7 +138,7 @@ To use brpc with glog, add `--with-glog`.
 
 To enable [thrift support](../en/thrift.md), install thrift first and add `--with-thrift`.
 
-**Run example**
+**运行样例**
 
 ```shell
 $ cd example/echo_c++
@@ -261,17 +149,17 @@ $ ./echo_client
 
 Examples link brpc statically, if you need to link the shared version, `make clean` and `LINK_SO=1 make`
 
-**Run tests**
+**运行测试**
 ```shell
 $ cd test
 $ make
 $ sh run_tests.sh
 ```
 
-### Compile brpc with cmake
+### 使用cmake编译brpc
 Same with [here](#compile-brpc-with-cmake)
 
-# Supported deps
+# 支持的依赖
 
 ## GCC: 4.8-7.1
 
