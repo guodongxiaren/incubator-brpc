@@ -47,7 +47,7 @@ $ make
 ```
 修改编译器为clang，添加选项 `--cxx=clang++ --cc=clang`。
 
-不链接调试符号，添加选项 `--nodebugsymbols` 然后编译将会得到更清亮的二进制文件。
+不想链接调试符号，添加选项 `--nodebugsymbols` 然后编译将会得到更清亮的二进制文件。
 
 使用glog版的brpc，添加选项 `--with-glog`.
 
@@ -79,11 +79,11 @@ cmake -B build && cmake --build build -j6
 
 要修改编译器为clang，请依次覆盖环境变量 `CC` 和 `CXX` 为 `clang` 和 `clang++`。
 
-不想链接调试符号，请移除 `build/CMakeCache.txt`，然后用cmake带着 `-DWITH_DEBUG_SYMBOLS=OFF`选项重新编译。
+不想链接调试符号，请移除 `build/CMakeCache.txt`，然后带着 `-DWITH_DEBUG_SYMBOLS=OFF`选项执行cmake。
 
-想要让brpc使用glog，cmake带着 `-DWITH_GLOG=ON`选项重新编译。
+想要让brpc使用glog，带着 `-DWITH_GLOG=ON`选项执行cmake。
 
-要启用 [thrift 支持](../en/thrift.md)，先安装thrift，然后用 `-DWITH_THRIFT=ON`选项重新编译。
+要启用 [thrift 支持](../en/thrift.md)，先安装thrift，然后带着 `-DWITH_THRIFT=ON`选项执行cmake。
 
 **用cmake运行样例**
 
@@ -96,7 +96,7 @@ $ ./echo_client
 
 上述操作会链接brpc的静态库到样例中，如果你想链接brpc的共享库，请先移除`CMakeCache.txt`，然后用`-DLINK_SO=ON`选项重新执行cmake。
 
-**用cmake运行测试**
+**运行测试**
 
 ```shell
 $ mkdir build && cd build && cmake -DBUILD_UNIT_TESTS=ON .. && make && make test
@@ -106,27 +106,27 @@ $ mkdir build && cd build && cmake -DBUILD_UNIT_TESTS=ON .. && make && make test
 
 ### 依赖准备
 
-CentOS needs to install EPEL generally otherwise many packages are not available by default.
+CentOS一般需要安装EPEL，否则很多包都默认不可用。
 ```shell
 sudo yum install epel-release
 ```
 
-Install common deps:
+安装通用依赖：
 ```shell
 sudo yum install git gcc-c++ make openssl-devel
 ```
 
-Install [gflags](https://github.com/gflags/gflags), [protobuf](https://github.com/google/protobuf), [leveldb](https://github.com/google/leveldb):
+安装 [gflags](https://github.com/gflags/gflags), [protobuf](https://github.com/google/protobuf), [leveldb](https://github.com/google/leveldb):
 ```shell
 sudo yum install gflags-devel protobuf-devel protobuf-compiler leveldb-devel
 ```
 
-If you need to enable cpu/heap profilers in examples:
+如果你要在样例中启用cpu/heap的profiler：
 ```shell
 sudo yum install gperftools-devel
 ```
 
-If you need to run tests, install and compile gtest-devel (which is not compiled yet):
+如果你要运行测试，那么要安装ligtest-dev:
 ```shell
 sudo yum install gtest-devel
 ```
@@ -139,15 +139,15 @@ git clone brpc, cd into the repo and run
 $ sh config_brpc.sh --headers=/usr/include --libs=/usr/lib64
 $ make
 ```
-To change compiler to clang, add `--cxx=clang++ --cc=clang`.
+修改编译器为clang，添加选项 `--cxx=clang++ --cc=clang`。
 
-To not link debugging symbols, add `--nodebugsymbols` and compiled binaries will be much smaller.
+不想链接调试符号，添加选项 `--nodebugsymbols` 然后编译将会得到更清亮的二进制文件。
 
-To use brpc with glog, add `--with-glog`.
+想要让brpc使用glog，添加选项：`--with-glog`。
 
-To enable [thrift support](../en/thrift.md), install thrift first and add `--with-thrift`.
+要启用 [thrift 支持](../en/thrift.md)，先安装thrift，然后添加选项：`--with-thrift`。
 
-**Run example**
+**运行样例**
 
 ```shell
 $ cd example/echo_c++
@@ -156,17 +156,17 @@ $ ./echo_server &
 $ ./echo_client
 ```
 
-Examples link brpc statically, if you need to link the shared version, `make clean` and `LINK_SO=1 make`
+上述操作会链接brpc的静态库到样例中，如果你想链接brpc的共享库，请依次执行：`make clean` 和 `LINK_SO=1 make`
 
-**Run tests**
+**运行测试**
 ```shell
 $ cd test
 $ make
 $ sh run_tests.sh
 ```
 
-### Compile brpc with cmake
-Same with [here](#compile-brpc-with-cmake)
+### 使用cmake编译brpc
+参考[这里](#使用cmake编译brpc)
 
 ## Linux with self-built deps
 
@@ -180,7 +180,7 @@ $ cmake . -DBUILD_SHARED_LIBS=1 -DBUILD_STATIC_LIBS=1
 $ make
 ```
 
-### Compile brpc
+### 编译brpc
 
 Keep on with the gflags example, let `../gflags_dev` be where gflags is cloned.
 
