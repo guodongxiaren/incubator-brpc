@@ -1,8 +1,8 @@
 # 构建
 
-brpc prefers static linkages of deps, so that they don't have to be installed on every machine running the app.
+brpc鼓励静态链接依赖，以便于每个运行brpc服务的机器不必再安装依赖。
 
-brpc依赖下面的包：
+brpc有如下依赖：
 
 * [gflags](https://github.com/gflags/gflags): Extensively used to define global options.
 * [protobuf](https://github.com/google/protobuf): Serializations of messages, interfaces of services.
@@ -28,16 +28,16 @@ sudo apt-get install -y git g++ make libssl-dev libgflags-dev libprotobuf-dev li
 sudo apt-get install -y libsnappy-dev
 ```
 
-If you need to enable cpu/heap profilers in examples:
+如果你要在样例中启用cpu/heap的profiler：
 ```shell
 sudo apt-get install -y libgoogle-perftools-dev
 ```
 
-If you need to run tests, install and compile libgtest-dev (which is not compiled yet):
+如果你要运行测试，那么要安装并编译ligtest-dev(它没有被默认编译):
 ```shell
 sudo apt-get install -y cmake libgtest-dev && cd /usr/src/gtest && sudo cmake . && sudo make && sudo mv libgtest* /usr/lib/ && cd -
 ```
-The directory of gtest source code may be changed, try `/usr/src/googletest/googletest` if `/usr/src/gtest` is not there.
+gtest源码目录可能变动，如果 `/usr/src/gtest` 不存在，请尝试 `/usr/src/googletest/googletest`。
 
 ### 使用config_brpc.sh编译brpc
 git克隆brpc，进入到项目目录，然后运行
@@ -62,7 +62,7 @@ $ ./echo_server &
 $ ./echo_client
 ```
 
-Examples link brpc statically, if you need to link the shared version, `make clean` and `LINK_SO=1 make`
+上述操作会链接brpc的静态库到样例中，如果你想链接brpc的共享库，请依次执行：`make clean` 和 `LINK_SO=1 make`
 
 **运行测试**
 ```shell
@@ -75,15 +75,15 @@ $ sh run_tests.sh
 ```shell
 cmake -B build && cmake --build build -j6
 ```
-To help VSCode or Emacs(LSP) to understand code correctly, add `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON` to generate `compile_commands.json`
+要帮助VSCode或Emacs(LSP)去正确地理解代码，添加 `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON`选项去生成 `compile_commands.json`。
 
-To change compiler to clang, overwrite environment variable `CC` and `CXX` to `clang` and `clang++` respectively.
+要修改编译器为clang，请依次覆盖环境变量 `CC` 和 `CXX` 为 `clang` 和 `clang++`。
 
-To not link debugging symbols, remove `build/CMakeCache.txt` and cmake with `-DWITH_DEBUG_SYMBOLS=OFF`
+不想链接调试符号，请移除 `build/CMakeCache.txt`，然后用cmake带着 `-DWITH_DEBUG_SYMBOLS=OFF`选项重新编译。
 
-To use brpc with glog, cmake with `-DWITH_GLOG=ON`.
+想要让brpc使用glog，cmake带着 `-DWITH_GLOG=ON`选项重新编译。
 
-To enable [thrift support](../en/thrift.md), install thrift first and cmake with `-DWITH_THRIFT=ON`.
+要启用 [thrift 支持](../en/thrift.md)，先安装thrift，然后用 `-DWITH_THRIFT=ON`选项重新编译。
 
 **用cmake运行样例**
 
@@ -93,7 +93,8 @@ $ cmake -B build && cmake --build build -j4
 $ ./echo_server &
 $ ./echo_client
 ```
-Examples link brpc statically, if you need to link the shared version, remove `CMakeCache.txt` and cmake with `-DLINK_SO=ON`
+
+上述操作会链接brpc的静态库到样例中，如果你想链接brpc的共享库，请先移除`CMakeCache.txt`，然后用`-DLINK_SO=ON`选项重新执行cmake。
 
 **用cmake运行测试**
 
@@ -130,7 +131,7 @@ If you need to run tests, install and compile gtest-devel (which is not compiled
 sudo yum install gtest-devel
 ```
 
-### Compile brpc with config_brpc.sh
+### 使用config_brpc.sh编译brpc
 
 git clone brpc, cd into the repo and run
 
@@ -337,6 +338,6 @@ brpc detects valgrind automatically (and registers stacks of bthread). Older val
 
 no known issues.
 
-# Track instances
+# 实例追踪
 
-We provide a program to help you to track and monitor all brpc instances. Just run [trackme_server](https://github.com/brpc/brpc/tree/master/tools/trackme_server/) somewhere and launch need-to-be-tracked instances with -trackme_server=SERVER. The trackme_server will receive pings from instances periodically and print logs when it does. You can aggregate instance addresses from the log and call builtin services of the instances for further information.
+我们提供了一个程序去帮助你追踪和监控所有brpc实例。 只需要现在某处运行 [trackme_server](https://github.com/brpc/brpc/tree/master/tools/trackme_server/) 然后再带着 -trackme_server=SERVER参数启动需要被追踪的实例。 The trackme_server will receive pings from instances periodically and print logs when it does. You can aggregate instance addresses from the log and call builtin services of the instances for further information.
