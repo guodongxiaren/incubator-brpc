@@ -33,7 +33,7 @@ sudo apt-get install -y libsnappy-dev
 sudo apt-get install -y libgoogle-perftools-dev
 ```
 
-如果你要运行测试，那么要安装并编译ligtest-dev(它没有被默认编译):
+如果你要运行测试，那么要安装并编译 ligtest-dev（它没有被默认编译）：
 ```shell
 sudo apt-get install -y cmake libgtest-dev && cd /usr/src/gtest && sudo cmake . && sudo make && sudo mv libgtest* /usr/lib/ && cd -
 ```
@@ -51,7 +51,7 @@ $ make
 
 使用glog版的brpc，添加选项 `--with-glog`.
 
-要启用 [thrift support](../en/thrift.md)，首先安装thrift并且添加选项 `--with-thrift`。
+要启用 [thrift 支持](../en/thrift.md)，首先安装thrift并且添加选项 `--with-thrift`。
 
 **运行样例**
 
@@ -168,13 +168,13 @@ $ sh run_tests.sh
 ### 使用cmake编译brpc
 参考[这里](#使用cmake编译brpc)
 
-## Linux with self-built deps
+## 自己构建依赖的Linux
 
-### Prepare deps
+### 依赖准备
 
-brpc builds itself to both static and shared libs by default, so it needs static and shared libs of deps to be built as well.
+brpc默认会构建出静态库和共享库，因此它也需要依赖有静态库和共享库两个版本。
 
-Take [gflags](https://github.com/gflags/gflags) as example, which does not build shared lib by default, you need to pass options to `cmake` to change the behavior:
+以 [gflags](https://github.com/gflags/gflags)为例，它默认不够尖共享库，你需要给 `cmake` 指定选项去改变这一行为：
 ```shell
 $ cmake . -DBUILD_SHARED_LIBS=1 -DBUILD_STATIC_LIBS=1
 $ make
@@ -182,24 +182,24 @@ $ make
 
 ### 编译brpc
 
-Keep on with the gflags example, let `../gflags_dev` be where gflags is cloned.
+还以gflags为例，让 `../gflags_dev` 表示gflags被克隆的位置。
 
-git clone brpc. cd into the repo and run
+git克隆brpc。进入到项目目录然后运行：
 
 ```shell
 $ sh config_brpc.sh --headers="../gflags_dev /usr/include" --libs="../gflags_dev /usr/lib64"
 $ make
 ```
 
-Here we pass multiple paths to `--headers` and `--libs` to make the script search for multiple places. You can also group all deps and brpc into one directory, then pass the directory to --headers/--libs which actually search all subdirectories recursively and will find necessary files.
+这里我们给 `--headers` 和 `--libs`传递多个路径使得脚本能够在多个地方进行检索。你也可以打包所有依赖和brpc一起放到一个目录中，然后把目录传递给 --headers/--libs选项，它会递归搜索所有子目录直到找到必须的文件。
 
-To change compiler to clang, add `--cxx=clang++ --cc=clang`.
+修改编译器为clang，添加选项 `--cxx=clang++ --cc=clang`。
 
-To not link debugging symbols, add `--nodebugsymbols` and compiled binaries will be much smaller.
+不想链接调试符号，添加选项 `--nodebugsymbols` 然后编译将会得到更清亮的二进制文件。
 
-To use brpc with glog, add `--with-glog`.
+使用glog版的brpc，添加选项 `--with-glog`.
 
-To enable [thrift support](../en/thrift.md), install thrift first and add `--with-thrift`.
+要启用 [thrift 支持](../en/thrift.md)，首先安装thrift并且添加选项 `--with-thrift`。
 
 ```shell
 $ ls my_dev
@@ -209,47 +209,47 @@ $ sh config_brpc.sh --headers=.. --libs=..
 $ make
 ```
 
-### Compile brpc with cmake
-Same with [here](#compile-brpc-with-cmake)
+### 使用cmake编译brpc
+参考[这里](#使用cmake编译brpc)
 
 ## MacOS
 
-Note: In the same running environment, the performance of the current Mac version is about 2.5 times worse than the Linux version. If your service is performance-critical, do not use MacOS as your production environment.
+注意：在相同运行环境下，当前Mac版brpc的性能比Linux版差2.5倍。如果你的服务是性能敏感的，请不要使用MacOs作为你的生产环境。
 
-### Prepare deps
+### 依赖准备
 
-Install common deps:
+安装通用依赖：
 ```shell
 brew install openssl git gnu-getopt coreutils
 ```
 
-Install [gflags](https://github.com/gflags/gflags), [protobuf](https://github.com/google/protobuf), [leveldb](https://github.com/google/leveldb):
+安装 [gflags](https://github.com/gflags/gflags)，[protobuf](https://github.com/google/protobuf)，[ [leveldb](https://github.com/google/leveldb)：
 ```shell
 brew install gflags protobuf leveldb
 ```
 
-If you need to enable cpu/heap profilers in examples:
+如果你要在样例中启用cpu/heap的profiler：
 ```shell
 brew install gperftools
 ```
 
-If you need to run tests, download and compile googletest (which is not compiled yet):
+如果你要运行测试，那么要安装并编译 googletest（它没有被默认编译）：
 ```shell
 git clone https://github.com/google/googletest -b release-1.10.0 && cd googletest/googletest && mkdir build && cd build && cmake -DCMAKE_CXX_FLAGS="-std=c++11" .. && make
 ```
-After the compilation, copy include/ and lib/ into /usr/local/include and /usr/local/lib respectively to expose gtest to all apps
+在编译完成后，复制 include/ 和 lib/ 目录到 /usr/local/include 和 /usr/local/lib目录中，以便于让所有应用都能使用gtest。
 
 ### 使用config_brpc.sh编译brpc
-git clone brpc, cd into the repo and run
+git克隆brpc，进入到项目目录然后运行：
 ```shell
 $ sh config_brpc.sh --headers=/usr/local/include --libs=/usr/local/lib --cc=clang --cxx=clang++
 $ make
 ```
-To not link debugging symbols, add `--nodebugsymbols` and compiled binaries will be much smaller.
+不想链接调试符号，添加选项 `--nodebugsymbols` 然后编译将会得到更清亮的二进制文件。
 
-To use brpc with glog, add `--with-glog`.
+使用glog版的brpc，添加选项 `--with-glog`.
 
-To enable [thrift support](../en/thrift.md), install thrift first and add `--with-thrift`.
+要启用 [thrift support](../en/thrift.md)，首先安装thrift并且添加选项 `--with-thrift`。
 
 **运行样例**
 
@@ -259,8 +259,7 @@ $ make
 $ ./echo_server &
 $ ./echo_client
 ```
-
-Examples link brpc statically, if you need to link the shared version, `make clean` and `LINK_SO=1 make`
+                                                                                                      上述操作会链接brpc的静态库到样例中，如果你想链接brpc的共享库，请依次执行：`make clean` 和 `LINK_SO=1 make`
 
 **运行测试**
 ```shell
@@ -286,11 +285,11 @@ Adding `-D__const__=` to cxxflags in your makefiles is a must to avoid [errno is
 
 ## Clang: 3.5-4.0
 
-no known issues.
+无已知问题。
 
 ## glibc: 2.12-2.25
 
-no known issues.
+无已知问题。
 
 ## protobuf: 2.4+
 
@@ -302,7 +301,7 @@ Arena in pb 3.x is not supported yet.
 
 ## gflags: 2.0-2.2.1
 
-no known issues.
+无已知问题。
 
 ## openssl: 0.97-1.1
 
@@ -336,7 +335,7 @@ brpc detects valgrind automatically (and registers stacks of bthread). Older val
 
 ## thrift: 0.9.3-0.11.0
 
-no known issues.
+无已知问题。
 
 # 实例追踪
 
