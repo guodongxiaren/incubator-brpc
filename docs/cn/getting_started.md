@@ -12,7 +12,7 @@ brpc有如下依赖：
 
 * [Ubuntu/LinuxMint/WSL](#ubuntulinuxmintwsl)
 * [Fedora/CentOS](#fedoracentos)
-* [Linux with self-built deps](#linux-with-self-built-deps)
+* [自己构建依赖的Linux](#自己构建依赖的Linux)
 * [MacOS](#macos)
 
 ## Ubuntu/LinuxMint/WSL
