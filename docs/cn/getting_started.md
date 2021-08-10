@@ -309,21 +309,21 @@ required by https.
 
 ## tcmalloc: 1.7-2.5
 
-brpc does **not** link [tcmalloc](http://goog-perftools.sourceforge.net/doc/tcmalloc.html) by default. Users link tcmalloc on-demand.
+brpc默认**不**链接 [tcmalloc](http://goog-perftools.sourceforge.net/doc/tcmalloc.html)。用户按需要链接tcmalloc。
 
-Comparing to ptmalloc embedded in glibc, tcmalloc often improves performance. However different versions of tcmalloc may behave really differently. For example, tcmalloc 2.1 may make multi-threaded examples in brpc perform significantly worse(due to a spinlock in tcmalloc) than the one using tcmalloc 1.7 and 2.5. Even different minor versions may differ. When you program behave unexpectedly, remove tcmalloc or try another version.
+和glibc内置的 ptmalloc相比，tcmalloc通常能提升性能。然而不同版本的 tcmalloc可能表现迥异。例如：tcmalloc 2.1与 tcmalloc 1.7 和 2.5相比，可能会让brpc的多线程样例性能显著恶化（tcmalloc中的一个自旋锁导致的）。甚至不同的小版本号之间变现也可能不同。当你的程序表现不符合预期的时候，移除 tcmalloc然后尝试其他版本。
 
-Code compiled with gcc 4.8.2 and linked to a tcmalloc compiled with earlier GCC may crash or deadlock before main(), E.g:
+用 gcc4.8.2编译然后链接更早版本GCC编译的 tcmalloc，可能会让程序中main()函数之前挂掉或者死锁，例如：
 
 ![img](../images/tcmalloc_stuck.png)
 
-When you meet the issue, compile tcmalloc with the same GCC.
+当你遇到这个问题的时候，请用同一个GCC重新编译 tcmalloc。
 
-Another common issue with tcmalloc is that it does not return memory to system as early as ptmalloc. So when there's an invalid memory access, the program may not crash directly, instead it crashes at a unrelated place, or even not crash. When you program has weird memory issues, try removing tcmalloc.
+另外一个使用 tcmalloc的常见问题是，它不会像 ptmalloc一样及时地归还内存给系统。因此当有一个无效的内存访问的时候，程序可能不会直接挂掉，取而代之的是它可能在一个不相关的地方挂掉，或者甚至一直不挂掉。当你的程序出现怪异的内存问题的时候，尝试移除 tcmalloc。
 
-If you want to use [cpu profiler](cpu_profiler.md) or [heap profiler](heap_profiler.md), do link `libtcmalloc_and_profiler.a`. These two profilers are based on tcmalloc.[contention profiler](contention_profiler.md) does not require tcmalloc.
+如果你要使用 [cpu profiler](cpu_profiler.md) 或 [heap profiler](heap_profiler.md)，要链接 `libtcmalloc_and_profiler.a`。这两个 profiler都是基于 tcmalloc的。而 [contention profiler](contention_profiler.md) 不需要tcmalloc。
 
-When you remove tcmalloc, not only remove the linkage with tcmalloc but also the macro `-DBRPC_ENABLE_CPU_PROFILER`.
+当你移除 tcmalloc的时候，不仅要移除tcmalloc的链接，也要移除宏 `-DBRPC_ENABLE_CPU_PROFILER`。
 
 ## glog: 3.3+
 
