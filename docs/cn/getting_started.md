@@ -259,7 +259,7 @@ $ make
 $ ./echo_server &
 $ ./echo_client
 ```
-                                                                                                      上述操作会链接brpc的静态库到样例中，如果你想链接brpc的共享库，请依次执行：`make clean` 和 `LINK_SO=1 make`
+上述操作会链接brpc的静态库到样例中，如果你想链接brpc的共享库，请依次执行：`make clean` 和 `LINK_SO=1 make`
 
 **运行测试**
 ```shell
