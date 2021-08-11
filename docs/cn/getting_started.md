@@ -18,7 +18,7 @@ brpc有如下依赖：
 ## Ubuntu/LinuxMint/WSL
 ### 依赖准备
 
-安装通用依赖， [gflags](https://github.com/gflags/gflags), [protobuf](https://github.com/google/protobuf), [leveldb](https://github.com/google/leveldb):
+安装通用依赖，[gflags](https://github.com/gflags/gflags), [protobuf](https://github.com/google/protobuf), [leveldb](https://github.com/google/leveldb):
 ```shell
 sudo apt-get install -y git g++ make libssl-dev libgflags-dev libprotobuf-dev libprotoc-dev protobuf-compiler libleveldb-dev
 ```
@@ -33,11 +33,11 @@ sudo apt-get install -y libsnappy-dev
 sudo apt-get install -y libgoogle-perftools-dev
 ```
 
-如果你要运行测试，那么要安装并编译 ligtest-dev（它没有被默认编译）：
+如果你要运行测试，那么要安装并编译ligtest-dev（它没有被默认编译）：
 ```shell
 sudo apt-get install -y cmake libgtest-dev && cd /usr/src/gtest && sudo cmake . && sudo make && sudo mv libgtest* /usr/lib/ && cd -
 ```
-gtest源码目录可能变动，如果 `/usr/src/gtest` 不存在，请尝试 `/usr/src/googletest/googletest`。
+gtest源码目录可能变动，如果`/usr/src/gtest`不存在，请尝试`/usr/src/googletest/googletest`。
 
 ### 使用config_brpc.sh编译brpc
 git克隆brpc，进入到项目目录，然后运行
@@ -45,13 +45,13 @@ git克隆brpc，进入到项目目录，然后运行
 $ sh config_brpc.sh --headers=/usr/include --libs=/usr/lib
 $ make
 ```
-修改编译器为clang，添加选项 `--cxx=clang++ --cc=clang`。
+修改编译器为clang，添加选项`--cxx=clang++ --cc=clang`。
 
-不想链接调试符号，添加选项 `--nodebugsymbols` 然后编译将会得到更清亮的二进制文件。
+不想链接调试符号，添加选项`--nodebugsymbols`，然后编译将会得到更轻量的二进制文件。
 
-使用glog版的brpc，添加选项 `--with-glog`.
+使用glog版的brpc，添加选项`--with-glog`。
 
-要启用 [thrift 支持](../en/thrift.md)，首先安装thrift并且添加选项 `--with-thrift`。
+要启用 [thrift 支持](../en/thrift.md)，首先安装thrift并且添加选项`--with-thrift`。
 
 **运行样例**
 
@@ -62,7 +62,7 @@ $ ./echo_server &
 $ ./echo_client
 ```
 
-上述操作会链接brpc的静态库到样例中，如果你想链接brpc的共享库，请依次执行：`make clean` 和 `LINK_SO=1 make`
+上述操作会链接brpc的静态库到样例中，如果你想链接brpc的共享库，请依次执行：`make clean`和`LINK_SO=1 make`
 
 **运行测试**
 ```shell
@@ -75,15 +75,15 @@ $ sh run_tests.sh
 ```shell
 cmake -B build && cmake --build build -j6
 ```
-要帮助VSCode或Emacs(LSP)去正确地理解代码，添加 `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON`选项去生成 `compile_commands.json`。
+要帮助VSCode或Emacs(LSP)去正确地理解代码，添加`-DCMAKE_EXPORT_COMPILE_COMMANDS=ON`选项去生成`compile_commands.json`。
 
-要修改编译器为clang，请依次覆盖环境变量 `CC` 和 `CXX` 为 `clang` 和 `clang++`。
+要修改编译器为clang，请修改环境变量`CC`和`CXX`为`clang`和`clang++`。
 
-不想链接调试符号，请移除 `build/CMakeCache.txt`，然后带着 `-DWITH_DEBUG_SYMBOLS=OFF`选项执行cmake。
+不想链接调试符号，请移除`build/CMakeCache.txt`，然后用`-DWITH_DEBUG_SYMBOLS=OFF`选项执行cmake。
 
-想要让brpc使用glog，带着 `-DWITH_GLOG=ON`选项执行cmake。
+想要让brpc使用glog，用`-DWITH_GLOG=ON`选项执行cmake。
 
-要启用 [thrift 支持](../en/thrift.md)，先安装thrift，然后带着 `-DWITH_THRIFT=ON`选项执行cmake。
+要启用 [thrift 支持](../en/thrift.md)，先安装thrift，然后用`-DWITH_THRIFT=ON`选项执行cmake。
 
 **用cmake运行样例**
 
@@ -133,15 +133,15 @@ sudo yum install gtest-devel
 
 ### 使用config_brpc.sh编译brpc
 
-git clone brpc, cd into the repo and run
+git克隆brpc，进入项目目录然后执行：
 
 ```shell
 $ sh config_brpc.sh --headers=/usr/include --libs=/usr/lib64
 $ make
 ```
-修改编译器为clang，添加选项 `--cxx=clang++ --cc=clang`。
+修改编译器为clang，添加选项`--cxx=clang++ --cc=clang`。
 
-不想链接调试符号，添加选项 `--nodebugsymbols` 然后编译将会得到更清亮的二进制文件。
+不想链接调试符号，添加选项`--nodebugsymbols` 然后编译将会得到更轻量的二进制文件。
 
 想要让brpc使用glog，添加选项：`--with-glog`。
 
@@ -156,7 +156,7 @@ $ ./echo_server &
 $ ./echo_client
 ```
 
-上述操作会链接brpc的静态库到样例中，如果你想链接brpc的共享库，请依次执行：`make clean` 和 `LINK_SO=1 make`
+上述操作会链接brpc的静态库到样例中，如果你想链接brpc的共享库，请依次执行：`make clean`和`LINK_SO=1 make`
 
 **运行测试**
 ```shell
@@ -174,7 +174,7 @@ $ sh run_tests.sh
 
 brpc默认会构建出静态库和共享库，因此它也需要依赖有静态库和共享库两个版本。
 
-以 [gflags](https://github.com/gflags/gflags)为例，它默认不够尖共享库，你需要给 `cmake` 指定选项去改变这一行为：
+以[gflags](https://github.com/gflags/gflags)为例，它默认不够尖共享库，你需要给`cmake`指定选项去改变这一行为：
 ```shell
 $ cmake . -DBUILD_SHARED_LIBS=1 -DBUILD_STATIC_LIBS=1
 $ make
@@ -182,7 +182,7 @@ $ make
 
 ### 编译brpc
 
-还以gflags为例，让 `../gflags_dev` 表示gflags被克隆的位置。
+还以gflags为例，`../gflags_dev`表示gflags被克隆的位置。
 
 git克隆brpc。进入到项目目录然后运行：
 
@@ -191,15 +191,15 @@ $ sh config_brpc.sh --headers="../gflags_dev /usr/include" --libs="../gflags_dev
 $ make
 ```
 
-这里我们给 `--headers` 和 `--libs`传递多个路径使得脚本能够在多个地方进行检索。你也可以打包所有依赖和brpc一起放到一个目录中，然后把目录传递给 --headers/--libs选项，它会递归搜索所有子目录直到找到必须的文件。
+这里我们给`--headers`和`--libs`传递多个路径使得脚本能够在多个地方进行检索。你也可以打包所有依赖和brpc一起放到一个目录中，然后把目录传递给 --headers/--libs选项，它会递归搜索所有子目录直到找到必须的文件。
 
-修改编译器为clang，添加选项 `--cxx=clang++ --cc=clang`。
+修改编译器为clang，添加选项`--cxx=clang++ --cc=clang`。
 
-不想链接调试符号，添加选项 `--nodebugsymbols` 然后编译将会得到更清亮的二进制文件。
+不想链接调试符号，添加选项`--nodebugsymbols`，然后编译将会得到更轻量的二进制文件。
 
-使用glog版的brpc，添加选项 `--with-glog`.
+使用glog版的brpc，添加选项`--with-glog`。
 
-要启用 [thrift 支持](../en/thrift.md)，首先安装thrift并且添加选项 `--with-thrift`。
+要启用[thrift 支持](../en/thrift.md)，首先安装thrift并且添加选项`--with-thrift`。
 
 ```shell
 $ ls my_dev
@@ -223,7 +223,7 @@ $ make
 brew install openssl git gnu-getopt coreutils
 ```
 
-安装 [gflags](https://github.com/gflags/gflags)，[protobuf](https://github.com/google/protobuf)，[ [leveldb](https://github.com/google/leveldb)：
+安装[gflags](https://github.com/gflags/gflags)，[protobuf](https://github.com/google/protobuf)，[ [leveldb](https://github.com/google/leveldb)：
 ```shell
 brew install gflags protobuf leveldb
 ```
@@ -233,11 +233,11 @@ brew install gflags protobuf leveldb
 brew install gperftools
 ```
 
-如果你要运行测试，那么要安装并编译 googletest（它没有被默认编译）：
+如果你要运行测试，那么要安装并编译googletest（它没有被默认编译）：
 ```shell
 git clone https://github.com/google/googletest -b release-1.10.0 && cd googletest/googletest && mkdir build && cd build && cmake -DCMAKE_CXX_FLAGS="-std=c++11" .. && make
 ```
-在编译完成后，复制 include/ 和 lib/ 目录到 /usr/local/include 和 /usr/local/lib目录中，以便于让所有应用都能使用gtest。
+在编译完成后，复制include/和lib/目录到/usr/local/include和/usr/local/lib目录中，以便于让所有应用都能使用gtest。
 
 ### 使用config_brpc.sh编译brpc
 git克隆brpc，进入到项目目录然后运行：
@@ -245,11 +245,11 @@ git克隆brpc，进入到项目目录然后运行：
 $ sh config_brpc.sh --headers=/usr/local/include --libs=/usr/local/lib --cc=clang --cxx=clang++
 $ make
 ```
-不想链接调试符号，添加选项 `--nodebugsymbols` 然后编译将会得到更清亮的二进制文件。
+不想链接调试符号，添加选项`--nodebugsymbols`，然后编译将会得到更轻量的二进制文件。
 
-使用glog版的brpc，添加选项 `--with-glog`.
+使用glog版的brpc，添加选项`--with-glog`。
 
-要启用 [thrift support](../en/thrift.md)，首先安装thrift并且添加选项 `--with-thrift`。
+要启用[thrift 支持](../en/thrift.md)，首先安装thrift并且添加选项`--with-thrift`。
 
 **运行样例**
 
@@ -259,7 +259,7 @@ $ make
 $ ./echo_server &
 $ ./echo_client
 ```
-上述操作会链接brpc的静态库到样例中，如果你想链接brpc的共享库，请依次执行：`make clean` 和 `LINK_SO=1 make`
+上述操作会链接brpc的静态库到样例中，如果你想链接brpc的共享库，请依次执行：`make clean`和`LINK_SO=1 make`
 
 **运行测试**
 ```shell
@@ -269,7 +269,7 @@ $ sh run_tests.sh
 ```
 
 ### 使用cmake编译brpc
-Same with [here](#compile-brpc-with-cmake)
+参考[这里](#使用cmake编译brpc)
 
 # 支持的依赖
 
@@ -294,8 +294,8 @@ GCC7中over-aligned的问题暂时被禁止。
 ## protobuf: 2.4+
 
 同一个文件兼容pb 3.x版本和pb 2.x版本：
-不要使用proto3新增的类型，并且在proto文件的起始位置添加`syntax=proto2;`。
-[tools/add_syntax_equal_proto2_to_all.sh](https://github.com/brpc/brpc/blob/master/tools/add_syntax_equal_proto2_to_all.sh)can add `syntax="proto2"` to all proto files without it.
+不要使用proto3新增的类型，并且在proto文件的起始位置添加`syntax=proto2;`声明。
+[tools/add_syntax_equal_proto2_to_all.sh](https://github.com/brpc/brpc/blob/master/tools/add_syntax_equal_proto2_to_all.sh)这个脚本可以给所有没有这行声明的proto文件添加`syntax="proto2"`声明。
 
 pb 3.x中的Arena至今没被支持。
 
@@ -305,23 +305,23 @@ pb 3.x中的Arena至今没被支持。
 
 ## openssl: 0.97-1.1
 
-required by https.
+被https功能需要。
 
 ## tcmalloc: 1.7-2.5
 
 brpc默认**不**链接 [tcmalloc](http://goog-perftools.sourceforge.net/doc/tcmalloc.html)。用户按需要链接tcmalloc。
 
-和glibc内置的 ptmalloc相比，tcmalloc通常能提升性能。然而不同版本的 tcmalloc可能表现迥异。例如：tcmalloc 2.1与 tcmalloc 1.7 和 2.5相比，可能会让brpc的多线程样例性能显著恶化（tcmalloc中的一个自旋锁导致的）。甚至不同的小版本号之间变现也可能不同。当你的程序表现不符合预期的时候，移除 tcmalloc然后尝试其他版本。
+和glibc内置的ptmalloc相比，tcmalloc通常能提升性能。然而不同版本的tcmalloc可能表现迥异。例如：tcmalloc 2.1与 tcmalloc 1.7和2.5相比，可能会让brpc的多线程样例性能显著恶化（tcmalloc中的一个自旋锁导致的）。甚至不同的小版本号之间变现也可能不同。当你的程序表现不符合预期的时候，移除tcmalloc然后尝试其他版本。
 
-用 gcc4.8.2编译然后链接更早版本GCC编译的 tcmalloc，可能会让程序中main()函数之前挂掉或者死锁，例如：
+用gcc4.8.2编译然后链接更早版本GCC编译的tcmalloc，可能会让程序中main()函数之前挂掉或者死锁，例如：
 
 ![img](../images/tcmalloc_stuck.png)
 
-当你遇到这个问题的时候，请用同一个GCC重新编译 tcmalloc。
+当你遇到这个问题的时候，请用同一个GCC重新编译tcmalloc。
 
-另外一个使用 tcmalloc的常见问题是，它不会像 ptmalloc一样及时地归还内存给系统。因此当有一个无效的内存访问的时候，程序可能不会直接挂掉，取而代之的是它可能在一个不相关的地方挂掉，或者甚至一直不挂掉。当你的程序出现怪异的内存问题的时候，尝试移除 tcmalloc。
+另外一个使用tcmalloc的常见问题是，它不会像 ptmalloc一样及时地归还内存给系统。因此当有一个无效的内存访问的时候，程序可能不会直接挂掉，取而代之的是它可能在一个不相关的地方挂掉，或者甚至一直不挂掉。当你的程序出现怪异的内存问题的时候，尝试移除tcmalloc。
 
-如果你要使用[cpu profiler](cpu_profiler.md) 或 [heap profiler](heap_profiler.md)，要链接 `libtcmalloc_and_profiler.a`。这两个 profiler都是基于 tcmalloc的。而 [contention profiler](contention_profiler.md) 不需要tcmalloc。
+如果你要使用[cpu profiler](cpu_profiler.md)或[heap profiler](heap_profiler.md)，要链接`libtcmalloc_and_profiler.a`。这两个 profiler都是基于tcmalloc的。而[contention profiler](contention_profiler.md)不需要tcmalloc。
 
 当你移除tcmalloc的时候，不仅要移除tcmalloc的链接，也要移除宏`-DBRPC_ENABLE_CPU_PROFILER`。
 
@@ -331,7 +331,6 @@ brpc实现了一个默认的[日志功能](../../src/butil/logging.h)它和glog�
 
 ## valgrind: 3.8+
 
-brpc detects valgrind automatically (and registers stacks of bthread). Older valgrind(say 3.2) is not supported.
 brpc会自动检测valgrind（然后注册bthread的栈）。不支持老版本的valgrind（比如3.2）。
 
 ## thrift: 0.9.3-0.11.0
