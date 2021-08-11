@@ -275,13 +275,13 @@ Same with [here](#compile-brpc-with-cmake)
 
 ## GCC: 4.8-7.1
 
-c++11 is turned on by default to remove dependencies on boost (atomic).
+c++11被默认启用，以去除去boost的依赖（比如atomic）。
 
-The over-aligned issues in GCC7 is suppressed temporarily now.
+GCC7中over-aligned的问题暂时被禁止。
 
-Using other versions of gcc may generate warnings, contact us to fix.
+使用其他版本的gcc可能会产生编译警告，请联系我们予以修复。
 
-Adding `-D__const__=` to cxxflags in your makefiles is a must to avoid [errno issue in gcc4+](thread_local.md).
+请在makefile中给cxxflags增加`-D__const__=`选项以避免[gcc4+中的errno问题](thread_local.md).
 
 ## Clang: 3.5-4.0
 
@@ -293,11 +293,11 @@ Adding `-D__const__=` to cxxflags in your makefiles is a must to avoid [errno is
 
 ## protobuf: 2.4+
 
-Be compatible with pb 3.x and pb 2.x with the same file:
-Don't use new types in proto3 and start the proto file with `syntax="proto2";`
+同一个文件兼容pb 3.x版本和pb 2.x版本：
+不要使用proto3新增的类型，并且在proto文件的起始位置添加`syntax=proto2;`。
 [tools/add_syntax_equal_proto2_to_all.sh](https://github.com/brpc/brpc/blob/master/tools/add_syntax_equal_proto2_to_all.sh)can add `syntax="proto2"` to all proto files without it.
 
-Arena in pb 3.x is not supported yet.
+pb 3.x中的Arena至今没被支持。
 
 ## gflags: 2.0-2.2.1
 
@@ -321,17 +321,18 @@ brpc默认**不**链接 [tcmalloc](http://goog-perftools.sourceforge.net/doc/tcm
 
 另外一个使用 tcmalloc的常见问题是，它不会像 ptmalloc一样及时地归还内存给系统。因此当有一个无效的内存访问的时候，程序可能不会直接挂掉，取而代之的是它可能在一个不相关的地方挂掉，或者甚至一直不挂掉。当你的程序出现怪异的内存问题的时候，尝试移除 tcmalloc。
 
-如果你要使用 [cpu profiler](cpu_profiler.md) 或 [heap profiler](heap_profiler.md)，要链接 `libtcmalloc_and_profiler.a`。这两个 profiler都是基于 tcmalloc的。而 [contention profiler](contention_profiler.md) 不需要tcmalloc。
+如果你要使用[cpu profiler](cpu_profiler.md) 或 [heap profiler](heap_profiler.md)，要链接 `libtcmalloc_and_profiler.a`。这两个 profiler都是基于 tcmalloc的。而 [contention profiler](contention_profiler.md) 不需要tcmalloc。
 
-当你移除 tcmalloc的时候，不仅要移除tcmalloc的链接，也要移除宏 `-DBRPC_ENABLE_CPU_PROFILER`。
+当你移除tcmalloc的时候，不仅要移除tcmalloc的链接，也要移除宏`-DBRPC_ENABLE_CPU_PROFILER`。
 
 ## glog: 3.3+
 
-brpc implements a default [logging utility](../../src/butil/logging.h) which conflicts with glog. To replace this with glog, add *--with-glog* to config_brpc.sh or add `-DWITH_GLOG=ON` to cmake.
+brpc实现了一个默认的[日志功能](../../src/butil/logging.h)它和glog冲突。要替换成glog，可以给config_brpc.sh增加*--with-glog*选项或者给cmake增加`-DWITH_GLOG=ON`选项。
 
 ## valgrind: 3.8+
 
 brpc detects valgrind automatically (and registers stacks of bthread). Older valgrind(say 3.2) is not supported.
+brpc会自动检测valgrind（然后注册bthread的栈）。不支持老版本的valgrind（比如3.2）。
 
 ## thrift: 0.9.3-0.11.0
 
@@ -339,4 +340,4 @@ brpc detects valgrind automatically (and registers stacks of bthread). Older val
 
 # 实例追踪
 
-我们提供了一个程序去帮助你追踪和监控所有brpc实例。 只需要现在某处运行 [trackme_server](https://github.com/brpc/brpc/tree/master/tools/trackme_server/) 然后再带着 -trackme_server=SERVER参数启动需要被追踪的实例。 The trackme_server will receive pings from instances periodically and print logs when it does. You can aggregate instance addresses from the log and call builtin services of the instances for further information.
+我们提供了一个程序去帮助你追踪和监控所有brpc实例。 只需要现在某处运行 [trackme_server](https://github.com/brpc/brpc/tree/master/tools/trackme_server/) 然后再带着 -trackme_server=SERVER参数启动需要被追踪的实例。trackme_server将从实例周期性地收到ping消息然后打印日志。您可以从日志中聚合实例地址，并调用实例的内置服务以获取更多信息。
