@@ -210,6 +210,18 @@ int Channel::Init(const char* server_addr_and_port,
         LOG(ERROR) << "Channel does not support the protocol";
         return -1;
     }
+
+    if (ptype == PROTOCOL_HTTP) {
+        std::string scheme;
+        std::string host;
+        int port = -1;
+        if (ParseURL(server_addr_and_port, &scheme, &host, &port) != 0) {
+            LOG(ERROR) << "Invalid address=`" << server_addr_and_port << '\'';
+            return -1;
+        }
+        _hostname.swap(host);
+    }
+
     if (protocol->parse_server_address != NULL) {
         if (!protocol->parse_server_address(&point, server_addr_and_port)) {
             LOG(ERROR) << "Fail to parse address=`" << server_addr_and_port << '\'';
