@@ -212,10 +212,8 @@ int Channel::Init(const char* server_addr_and_port,
     }
 
     if (ptype == PROTOCOL_HTTP) {
-        std::string scheme;
         std::string host;
-        int port = -1;
-        if (ParseURL(server_addr_and_port, &scheme, &host, &port) != 0) {
+        if (ParseURL(server_addr_and_port, NULL, &host, NULL) != 0) {
             LOG(ERROR) << "Invalid address=`" << server_addr_and_port << '\'';
             return -1;
         }
@@ -401,7 +399,7 @@ void Channel::CallMethod(const google::protobuf::MethodDescriptor* method,
 
     if (_options.protocol == PROTOCOL_HTTP) {
         const URI& uri = cntl->http_request().uri();
-        if (uri.host().empty()) {
+        if (uri.host().empty() && !_hostname.empty()) {
             const_cast<URI&>(uri).set_host(_hostname);
         }
     }
