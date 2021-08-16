@@ -210,16 +210,15 @@ int Channel::Init(const char* server_addr_and_port,
         LOG(ERROR) << "Channel does not support the protocol";
         return -1;
     }
-
-    if (ptype == PROTOCOL_HTTP) {
+    if (ptype == brpc::PROTOCOL_HTTP) {
         std::string host;
-        if (ParseURL(server_addr_and_port, NULL, &host, NULL) != 0) {
-            LOG(ERROR) << "Invalid address=`" << server_addr_and_port << '\'';
-            return -1;
+        if (ParseURL(server_addr_and_port, NULL, &host, NULL) == 0) {
+            butil::ip_t ip;
+            if (butil::hostname2ip(host.c_str(), &ip) == 0) {
+                _hostname.swap(host);
+            }
         }
-        _hostname.swap(host);
     }
-
     if (protocol->parse_server_address != NULL) {
         if (!protocol->parse_server_address(&point, server_addr_and_port)) {
             LOG(ERROR) << "Fail to parse address=`" << server_addr_and_port << '\'';
@@ -252,6 +251,15 @@ int Channel::Init(const char* server_addr, int port,
     if (protocol == NULL || !protocol->support_client()) {
         LOG(ERROR) << "Channel does not support the protocol";
         return -1;
+    }
+    if (ptype == brpc::PROTOCOL_HTTP) {
+        std::string host;
+        if (ParseURL(server_addr, NULL, &host, NULL) == 0) {
+            butil::ip_t ip;
+            if (butil::hostname2ip(host.c_str(), &ip) == 0) {
+                _hostname.swap(host);
+            }
+        }
     }
     if (protocol->parse_server_address != NULL) {
         if (!protocol->parse_server_address(&point, server_addr)) {
@@ -340,6 +348,15 @@ int Channel::Init(const char* ns_url,
         if (_options.mutable_ssl_options()->sni_name.empty()) {
             ParseURL(ns_url,
                      NULL, &_options.mutable_ssl_options()->sni_name, NULL);
+        }
+    }
+    if (_options.protocol == brpc::PROTOCOL_HTTP) {
+        std::string host;
+        if (ParseURL(ns_url, NULL, &host, NULL) == 0) {
+            butil::ip_t ip;
+            if (butil::hostname2ip(host.c_str(), &ip) == 0) {
+                _hostname.swap(host);
+            }
         }
     }
     LoadBalancerWithNaming* lb = new (std::nothrow) LoadBalancerWithNaming;
