@@ -413,7 +413,6 @@ void Channel::CallMethod(const google::protobuf::MethodDescriptor* method,
         CHECK(cntl->protocol_param().empty());
         cntl->protocol_param() = _options.protocol.param();
     }
-
     if (_options.protocol == PROTOCOL_HTTP) {
         const URI& uri = cntl->http_request().uri();
         if (uri.host().empty() && !_hostname.empty()) {
