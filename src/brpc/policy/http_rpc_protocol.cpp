@@ -56,6 +56,8 @@ DECLARE_int32(http_verbose_max_body_length);
 // Defined in grpc.cpp
 int64_t ConvertGrpcTimeoutToUS(const std::string* grpc_timeout);
 
+#define BRPC_CRLF "\r\n"
+
 namespace policy {
 
 DEFINE_int32(http_max_error_length, 2048, "Max printed length of a http error");
@@ -1491,6 +1493,14 @@ void ProcessHttpRequest(InputMessageBase *msg) {
             sample->meta.set_compress_type(COMPRESS_TYPE_NONE);
             sample->meta.set_protocol_type(PROTOCOL_HTTP);
             sample->meta.set_attachment_size(req_body.size());
+            butil::IOBufBuilder os;
+			for (HttpHeader::HeaderIterator it = req_header.HeaderBegin();
+					it != req_header.HeaderEnd(); ++it) {
+				os << it->first << ": " << it->second << BRPC_CRLF;
+			}
+            butil::IOBuf sample_request;
+            os.move_to(sample_request);
+            sample_request.append(req_body); // POST TODO 
             sample->request = req_body;
             sample->submit(start_parse_us);
         }
