@@ -1493,7 +1493,6 @@ void ProcessHttpRequest(InputMessageBase *msg) {
             butil::IOBuf sample_request;
             butil::EndPoint ep;
             MakeRawHttpRequest(&sample_request, &req_header, ep, &req_body);
-
             sample->request = sample_request;
             sample->submit(start_parse_us);
         }
