@@ -23,11 +23,11 @@
 #include <butil/file_util.h>
 #include <bvar/bvar.h>
 #include <bthread/bthread.h>
-#include <brpc/details/http_message.h>
 #include <brpc/channel.h>
 #include <brpc/server.h>
 #include <brpc/rpc_dump.h>
 #include <brpc/serialized_request.h>
+#include <brpc/details/http_message.h>
 #include "info_thread.h"
 
 DEFINE_string(dir, "", "The directory of dumped requests");
