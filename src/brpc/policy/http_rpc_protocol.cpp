@@ -56,7 +56,6 @@ DECLARE_int32(http_verbose_max_body_length);
 // Defined in grpc.cpp
 int64_t ConvertGrpcTimeoutToUS(const std::string* grpc_timeout);
 
-#define BRPC_CRLF "\r\n"
 
 namespace policy {
 
