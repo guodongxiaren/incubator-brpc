@@ -23,6 +23,7 @@
 #include <butil/file_util.h>
 #include <bvar/bvar.h>
 #include <bthread/bthread.h>
+#include <brpc/details/http_message.h>
 #include <brpc/channel.h>
 #include <brpc/server.h>
 #include <brpc/rpc_dump.h>
@@ -162,14 +163,13 @@ static void* replay_thread(void* arg) {
             brpc::SerializedRequest* req_ptr = &req;
             cntl->reset_sampled_request(sample_guard.release());
             if (sample->meta.protocol_type() == brpc::PROTOCOL_HTTP) {
-                std::stringstream uri_ss;
-                uri_ss << "/" << sample->meta.service_name() 
-                       << "/" << sample->meta.method_name();
-
-                cntl->http_request().uri() = uri_ss.str();
-                cntl->http_request().set_method(brpc::HTTP_METHOD_POST);
-                cntl->http_request().set_content_type("application/json");
-                cntl->request_attachment() = sample->request.movable();
+                brpc::HttpMessage http_message;
+                http_message.ParseFromIOBuf(sample->request);
+                cntl->http_request().Swap(http_message.header());
+                // clear origin Host in header
+                cntl->http_request().RemoveHeader("Host");
+                cntl->http_request().uri().set_host("");
+                cntl->request_attachment() = http_message.body().movable();
 
                 req_ptr = NULL;
             } else if (sample->meta.attachment_size() > 0) {

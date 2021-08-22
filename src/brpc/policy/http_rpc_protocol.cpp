@@ -1488,20 +1488,15 @@ void ProcessHttpRequest(InputMessageBase *msg) {
         }
         SampledRequest* sample = AskToBeSampled();
         if (sample) {
-            sample->meta.set_service_name(svc->GetDescriptor()->name());
-            sample->meta.set_method_name(method->name());
             sample->meta.set_compress_type(COMPRESS_TYPE_NONE);
             sample->meta.set_protocol_type(PROTOCOL_HTTP);
             sample->meta.set_attachment_size(req_body.size());
-            butil::IOBufBuilder os;
-			for (HttpHeader::HeaderIterator it = req_header.HeaderBegin();
-					it != req_header.HeaderEnd(); ++it) {
-				os << it->first << ": " << it->second << BRPC_CRLF;
-			}
+
             butil::IOBuf sample_request;
-            os.move_to(sample_request);
-            sample_request.append(req_body); // POST TODO 
-            sample->request = req_body;
+            butil::EndPoint ep;
+            MakeRawHttpRequest(&sample_request, &req_header, ep, &req_body);
+
+            sample->request = sample_request;
             sample->submit(start_parse_us);
         }
     } else {
