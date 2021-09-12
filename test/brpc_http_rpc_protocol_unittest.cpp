@@ -45,7 +45,6 @@
 #include "brpc/rpc_dump.h"
 #include "bvar/collector.h"
 
-
 namespace brpc {
 DECLARE_bool(rpc_dump);
 DECLARE_string(rpc_dump_dir);
@@ -1514,11 +1513,10 @@ TEST_F(HttpTest, dump_http_request) {
     options.protocol = "http";
     ASSERT_EQ(0, channel.Init(butil::EndPoint(butil::my_ip(), port), &options));
 
-    // make and send request and dump
+    // send request and dump it to file
     {
         test::EchoRequest req;
         req.set_message(EXP_REQUEST);
-
         std::string req_json;
         ASSERT_TRUE(json2pb::ProtoMessageToJson(req, &req_json));
 
