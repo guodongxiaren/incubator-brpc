@@ -23,15 +23,7 @@
 #include "butil/third_party/murmurhash3/murmurhash3.h"// fmix32
 #include "bthread/bthread.h"                          // bthread_start_background
 #include "brpc/event_dispatcher.h"
-#ifdef BRPC_SOCKET_HAS_EOF
-#include "brpc/details/has_epollrdhup.h"
-#endif
 #include "brpc/reloadable_flags.h"
-#if defined(OS_MACOSX)
-#include <sys/types.h>
-#include <sys/event.h>
-#include <sys/time.h>
-#endif
 
 namespace brpc {
 
@@ -76,4 +68,6 @@ EventDispatcher& GetGlobalEventDispatcher(int fd) {
     #include "brpc/event_dispatcher_epoll.cpp"
 #elif defined(OS_MACOSX)
     #include "brpc/event_dispatcher_kqueue.cpp"
+#else
+    #error Not implemented
 #endif
