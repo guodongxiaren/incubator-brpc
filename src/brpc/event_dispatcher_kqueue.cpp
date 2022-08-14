@@ -22,11 +22,6 @@
 
 namespace brpc {
 
-DEFINE_int32(event_dispatcher_num, 1, "Number of event dispatcher");
-
-DEFINE_bool(usercode_in_pthread, false, 
-            "Call user's callback in pthreads, use bthreads otherwise");
-
 EventDispatcher::EventDispatcher()
     : _epfd(-1)
     , _stop(false)
