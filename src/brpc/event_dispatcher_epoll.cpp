@@ -68,7 +68,7 @@ int EventDispatcher::Start(const bthread_attr_t* consumer_thread_attr) {
         return -1;
     }
 
-    // Set _consumer_thread_attr before creating epoll/kqueue thread to make sure
+    // Set _consumer_thread_attr before creating epoll thread to make sure
     // everyting seems sane to the thread.
     _consumer_thread_attr = (consumer_thread_attr  ?
                              *consumer_thread_attr : BTHREAD_ATTR_NORMAL);
@@ -85,7 +85,7 @@ int EventDispatcher::Start(const bthread_attr_t* consumer_thread_attr) {
     int rc = bthread_start_background(
         &_tid, &_epoll_thread_attr, RunThis, this);
     if (rc) {
-        LOG(FATAL) << "Fail to create epoll/kqueue thread: " << berror(rc);
+        LOG(FATAL) << "Fail to create epoll thread: " << berror(rc);
         return -1;
     }
     return 0;
