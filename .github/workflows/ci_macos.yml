@@ -27,6 +27,10 @@ jobs:
            #brew install openssl
            protoc --version
 
+    - name: compile with bazel
+      run: |
+           bazel build brpc
+
    #- name: compile-with-cmake
    #  run: |
    #       mkdir ${{env.BUILD_DIR}}
@@ -45,4 +49,5 @@ jobs:
     - name: unittest
       run: |
            cd test
+           make -j $(sysctl -n hw.logicalcpu)
            sh run_tests.sh
