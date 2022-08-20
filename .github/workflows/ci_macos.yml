@@ -20,7 +20,7 @@ jobs:
     
     - name: intall dependences
       run: |
-           brew install openssl gnu-getopt coreutiles gflags protobuf leveldb
+           brew install openssl gnu-getopt coreutils gflags protobuf leveldb
            #brew install leveldb
            #brew install gflags
            #brew install protobuf
