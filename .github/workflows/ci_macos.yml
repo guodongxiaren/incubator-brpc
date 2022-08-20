@@ -26,6 +26,9 @@ jobs:
 
     - name: unittest
       run: |
+           GETOPT_PATH=$(find "/usr/local/Cellar/" -name "getopt" -type f -perm +111 -exec dirname {} \;)
+           export PATH=$GETOPT_PATH:$PATH
+           ./config_brpc.sh --header="/usr/local/include" --libs="/usr/local/lib"
            cd test
            make -j $(sysctl -n hw.logicalcpu)
            sh run_tests.sh
