@@ -7,13 +7,12 @@ on:
     branches: [ ci_mac_flow ]
 
 env:
-  PROC_NUM: $(sysctl -n hw.logicalcpu)
-  BUILD_TYPE: Release
-  BUILD_DIR: build
+  os_image: macos-latest
+  proc_num: $(sysctl -n hw.logicalcpu)
 
 jobs:
   compile-with-make:
-    runs-on: macos-latest
+    runs-on: ${{env.os_image}}
 
     steps:
     - uses: actions/checkout@v2
@@ -30,10 +29,10 @@ jobs:
 
     - name: compile
       run: |
-           make -j $(sysctl -n hw.logicalcpu)
+           make -j ${{env.proc_num}}
 
   compile-with-cmake:
-    runs-on: macos-latest
+    runs-on: ${{env.os_image}}
 
     steps:
     - uses: actions/checkout@v2
@@ -51,10 +50,10 @@ jobs:
     - name: compile
       run: |
            cd build
-           make -j $(sysctl -n hw.logicalcpu)
+           make -j ${{env.proc_num}}
 
   compile-with-bazel:
-    runs-on: macos-latest
+    runs-on: ${{env.os_image}}
 
     steps:
     - uses: actions/checkout@v2
@@ -65,28 +64,28 @@ jobs:
 
     - name: compile
       run: |
-           bazel build brpc -j $(sysctl -n hw.logicalcpu)
+           bazel build brpc -j ${{env.proc_num}}
 
   unittest:
-    runs-on: macos-latest
+    runs-on: ${{env.os_image}}
 
     steps:
     - uses: actions/checkout@v2
     
     - name: intall dependences
       run: |
-           echo "PROC_NUM:" ${{env.PROC_NUM}}
            brew install openssl gnu-getopt coreutils gflags protobuf leveldb googletest
 
     - name: config_brpc
       run: |
            GETOPT_PATH=$(find "/usr/local/Cellar/" -name "getopt" -type f -perm +111 -exec dirname {} \;)
            export PATH=$GETOPT_PATH:$PATH
+           ./config_brpc.sh --header="/usr/local/include" --libs="/usr/local/lib"
 
     - name: compile
       run: |
            cd test
-           make -j $(sysctl -n hw.logicalcpu)
+           make -j ${{env.proc_num}}
 
     - name: test
       run: |
