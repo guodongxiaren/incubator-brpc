@@ -18,7 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - name: Install leveldb, gflags and protobuf
+    - name: intall dependences
       run: |
            brew install openssl gnu-getopt gflags protobuf leveldb
            #brew install leveldb
@@ -34,9 +34,10 @@ jobs:
    #       cmake ..
    #       make -j $(sysctl -n hw.logicalcpu)
    
-    - name: compile-with-make
+    - name: compile with make
       run: |
-           GETOPT_PATH=$(find "/opt/homebrew/Cellar/" -name "getopt" -type f -perm +111 -exec dirname {} \;)
+          #GETOPT_PATH=$(find "/opt/homebrew/Cellar/" -name "getopt" -type f -perm +111 -exec dirname {} \;)
+           GETOPT_PATH=$(find "/usr/local/Cellar/homebrew/Cellar/" -name "getopt" -type f -perm +111 -exec dirname {} \;)
            export PATH=$GETOPT_PATH:$PATH
            ./config_brpc.sh --header="/usr/local/include" --libs="/usr/local/lib"
            make -j $(sysctl -n hw.logicalcpu)
