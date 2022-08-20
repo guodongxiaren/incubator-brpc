@@ -24,10 +24,12 @@ jobs:
            uname -m
            brew install openssl gnu-getopt coreutils gflags protobuf leveldb googletest
 
-   #- name: compile with bazel
-   #  run: |
-   #       bazel build brpc -j $(sysctl -n hw.logicalcpu)
-
+    - name: unittest
+      run: |
+           cd test
+           make -j $(sysctl -n hw.logicalcpu)
+           sh run_tests.sh
+   
     - name: compile with cmake
       run: |
            mkdir ${{env.BUILD_DIR}}
@@ -41,10 +43,3 @@ jobs:
            export PATH=$GETOPT_PATH:$PATH
            ./config_brpc.sh --header="/usr/local/include" --libs="/usr/local/lib"
            make -j $(sysctl -n hw.logicalcpu)
-
-    - name: unittest
-      run: |
-           cd test
-           make -j $(sysctl -n hw.logicalcpu)
-           sh run_tests.sh
-   
