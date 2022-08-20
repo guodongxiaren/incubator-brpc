@@ -91,7 +91,7 @@ jobs:
            cd test
            sh run_tests.sh
 
-  g++-compile-with-make:
+  gcc-compile-with-make:
     runs-on: macos-latest 
 
     steps:
@@ -114,7 +114,7 @@ jobs:
       run: |
            make -j ${{env.proc_num}}
 
-  g++-compile-with-cmake:
+  gcc-compile-with-cmake:
     runs-on: macos-latest
 
     steps:
@@ -138,7 +138,7 @@ jobs:
            cd build
            make -j ${{env.proc_num}}
 
-  g++-compile-with-bazel:
+  gcc-compile-with-bazel:
     runs-on: macos-latest # https://github.com/actions/runner-images
 
     steps:
@@ -152,7 +152,7 @@ jobs:
       run: |
            bazel build -j ${{env.proc_num}} -c opt --copt -DHAVE_ZLIB=1 //...
 
-  g++-unittest:
+  gcc-unittest:
     runs-on: macos-latest # https://github.com/actions/runner-images
 
     steps:
