@@ -36,8 +36,8 @@ jobs:
    
     - name: compile-with-make
       run: |
-           alias getopt=$(find "/opt/homebrew/Cellar/" -name "getopt" -type f -perm +111)
-          #export PATH=/opt/homebrew/Cellar/gnu-getopt/2.38/bin:$PATH
+           GETOPT_PATH=$(find "/opt/homebrew/Cellar/" -name "getopt" -type f -perm +111 -exec dirname {} \;)
+           export PATH=$GETOPT_PATH:$PATH
            ./config_brpc.sh --header="/usr/local/include" --libs="/usr/local/lib"
            make -j $(sysctl -n hw.logicalcpu)
 
