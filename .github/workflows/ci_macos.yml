@@ -20,6 +20,8 @@ jobs:
     
     - name: intall dependences
       run: |
+           echo "arch:"
+           uname -m
            brew install openssl gnu-getopt coreutils gflags protobuf leveldb googletest
 
    #- name: compile with bazel
