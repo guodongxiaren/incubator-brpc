@@ -20,16 +20,13 @@ jobs:
     
     - name: intall dependences
       run: |
-           brew install openssl gnu-getopt coreutils gflags protobuf leveldb
-           #brew install leveldb
-           #brew install gflags
-           #brew install protobuf
-           #brew install openssl
+           echo "core num:" $(sysctl -n hw.logicalcpu)
+           brew install openssl gnu-getopt gflags protobuf leveldb
            protoc --version
 
-    - name: compile with bazel
-      run: |
-           bazel build brpc
+   #- name: compile with bazel
+   #  run: |
+   #       bazel build brpc -j $(sysctl -n hw.logicalcpu)
 
    #- name: compile-with-cmake
    #  run: |
@@ -40,9 +37,8 @@ jobs:
    
     - name: compile with make
       run: |
-          #GETOPT_PATH=$(find "/opt/homebrew/Cellar/" -name "getopt" -type f -perm +111 -exec dirname {} \;)
            GETOPT_PATH=$(find "/usr/local/Cellar/" -name "getopt" -type f -perm +111 -exec dirname {} \;)
-           export PATH=$GETOPT_PATH:$PATH
+           export PATH=$GETOPT_PATH:/usr/local/opt/coreutils/libexec/gnubin:$PATH
            ./config_brpc.sh --header="/usr/local/include" --libs="/usr/local/lib"
            make -j $(sysctl -n hw.logicalcpu)
 
