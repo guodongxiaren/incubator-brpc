@@ -2,9 +2,9 @@ name: build and test on macos
 
 on:
   push:
-    branches: [ mac_flow ]
+    branches: [ ci_mac_flow ]
   pull_request:
-    branches: [ mac_flow ]
+    branches: [ ci_mac_flow ]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -12,7 +12,7 @@ env:
   BUILD_DIR: build
 
 jobs:
-  compile-and-unittest:
+  compile-with-make:
     runs-on: macos-latest
 
     steps:
@@ -22,9 +22,9 @@ jobs:
       run: |
            brew install openssl gnu-getopt coreutils gflags protobuf leveldb googletest
 
-   #- name: compile with bazel
-   #  run: |
-   #       bazel build brpc -j $(sysctl -n hw.logicalcpu)
+   - name: compile with bazel
+     run: |
+          bazel build brpc -j $(sysctl -n hw.logicalcpu)
 
     - name: compile with make
       run: |
@@ -33,11 +33,15 @@ jobs:
            ./config_brpc.sh --header="/usr/local/include" --libs="/usr/local/lib"
            make -j $(sysctl -n hw.logicalcpu)
 
-    - name: unittest
+  compile-with-cmake:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: intall dependences
       run: |
-           cd test
-           make -j $(sysctl -n hw.logicalcpu)
-           sh run_tests.sh
+           brew install openssl gnu-getopt coreutils gflags protobuf leveldb googletest
 
     - name: compile with cmake
       run: |
@@ -45,4 +49,33 @@ jobs:
            cd ${{env.BUILD_DIR}}
            cmake ..
            make -j $(sysctl -n hw.logicalcpu)
-   
+
+  compile-with-bazel:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: intall dependences
+      run: |
+           brew install openssl gnu-getopt coreutils gflags protobuf leveldb
+
+   - name: compile with bazel
+     run: |
+          bazel build brpc -j $(sysctl -n hw.logicalcpu)
+
+  unittest:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: intall dependences
+      run: |
+           brew install openssl gnu-getopt coreutils gflags protobuf leveldb googletest
+
+    - name: unittest
+      run: |
+           cd test
+           make -j $(sysctl -n hw.logicalcpu)
+           sh run_tests.sh
