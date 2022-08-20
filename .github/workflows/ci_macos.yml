@@ -1,4 +1,4 @@
-name: build and test on macos
+name: Build and Test on Macos
 
 on:
   push:
@@ -7,6 +7,7 @@ on:
     branches: [ ci_mac_flow ]
 
 env:
+  PROC_NUM: $(sysctl -n hw.logicalcpu)
   BUILD_TYPE: Release
   BUILD_DIR: build
 
@@ -43,12 +44,13 @@ jobs:
 
     - name: cmake
       run: |
-           mkdir ${{env.BUILD_DIR}}
-           cd ${{env.BUILD_DIR}}
+           mkdir build
+           cd build
            cmake ..
 
     - name: compile
       run: |
+           cd build
            make -j $(sysctl -n hw.logicalcpu)
 
   compile-with-bazel:
@@ -73,6 +75,7 @@ jobs:
     
     - name: intall dependences
       run: |
+           echo "PROC_NUM:" ${{env.PROC_NUM}}
            brew install openssl gnu-getopt coreutils gflags protobuf leveldb googletest
 
     - name: config_brpc
@@ -87,4 +90,5 @@ jobs:
 
     - name: test
       run: |
+           cd test
            sh run_tests.sh
