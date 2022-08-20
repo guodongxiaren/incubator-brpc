@@ -1,4 +1,4 @@
-name: build on macos
+name: build and test on macos
 
 on:
   push:
@@ -12,7 +12,7 @@ env:
   BUILD_DIR: build
 
 jobs:
-  build:
+  compile-and-unittest:
     runs-on: macos-latest
 
     steps:
@@ -37,7 +37,7 @@ jobs:
     - name: compile with make
       run: |
           #GETOPT_PATH=$(find "/opt/homebrew/Cellar/" -name "getopt" -type f -perm +111 -exec dirname {} \;)
-           GETOPT_PATH=$(find "/usr/local/Cellar/homebrew/Cellar/" -name "getopt" -type f -perm +111 -exec dirname {} \;)
+           GETOPT_PATH=$(find "/usr/local/Cellar/" -name "getopt" -type f -perm +111 -exec dirname {} \;)
            export PATH=$GETOPT_PATH:$PATH
            ./config_brpc.sh --header="/usr/local/include" --libs="/usr/local/lib"
            make -j $(sysctl -n hw.logicalcpu)
