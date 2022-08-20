@@ -20,15 +20,26 @@ jobs:
     
     - name: Install leveldb, gflags and protobuf
       run: |
-           brew install leveldb
-           brew install gflags
-           brew install protobuf
-           brew install openssl
+           brew install openssl gnu-getopt gflags protobuf leveldb
+           #brew install leveldb
+           #brew install gflags
+           #brew install protobuf
+           #brew install openssl
            protoc --version
 
-    - name: Build with cmake
+   #- name: compile-with-cmake
+   #  run: |
+   #       mkdir ${{env.BUILD_DIR}}
+   #       cd ${{env.BUILD_DIR}}
+   #       cmake ..
+   #       make -j $(sysctl -n hw.logicalcpu)
+    - name: compile-with-make
       run: |
-           mkdir ${{env.BUILD_DIR}}
-           cd ${{env.BUILD_DIR}}
-           cmake ..
+           export PATH=/opt/homebrew/Cellar/gnu-getopt/2.38/bin:$PATH
+           ./config_brpc.sh --header="/usr/local/include" --libs="/usr/local/lib"
            make -j $(sysctl -n hw.logicalcpu)
+
+    - name: unittest
+      run: |
+           cd test
+           sh run_tests.sh
