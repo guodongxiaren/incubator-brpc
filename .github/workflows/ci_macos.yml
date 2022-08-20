@@ -10,7 +10,7 @@ env:
   proc_num: $(sysctl -n hw.logicalcpu)
 
 jobs:
-  compile-with-make:
+  clang-compile-with-make:
     runs-on: macos-latest # https://github.com/actions/runner-images
 
     steps:
@@ -30,8 +30,8 @@ jobs:
       run: |
            make -j ${{env.proc_num}}
 
-  compile-with-cmake:
-    runs-on: macos-latest # https://github.com/actions/runner-images
+  clang-compile-with-cmake:
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -51,8 +51,8 @@ jobs:
            cd build
            make -j ${{env.proc_num}}
 
-  compile-with-bazel:
-    runs-on: macos-latest # https://github.com/actions/runner-images
+  clang-compile-with-bazel:
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -63,10 +63,10 @@ jobs:
 
     - name: compile
       run: |
-           bazel build brpc -j ${{env.proc_num}}
+           bazel build -j ${{env.proc_num}} -c opt --copt -DHAVE_ZLIB=1 //...
 
-  unittest:
-    runs-on: macos-12 # https://github.com/actions/runner-images
+  clang-unittest:
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -90,3 +90,99 @@ jobs:
       run: |
            cd test
            sh run_tests.sh
+
+  g++-compile-with-make:
+    runs-on: macos-latest 
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: intall dependences
+      run: |
+           brew install openssl gnu-getopt coreutils gflags protobuf leveldb
+
+    - name: config_brpc
+      run: |
+           GETOPT_PATH=$(find "/usr/local/Cellar/" -name "getopt" -type f -perm +111 -exec dirname {} \;)
+           export PATH=$GETOPT_PATH:$PATH
+           ./config_brpc.sh --header="/usr/local/include" --libs="/usr/local/lib"
+      env:
+        CC: gcc-10
+        CXX: g++-10
+
+    - name: compile
+      run: |
+           make -j ${{env.proc_num}}
+
+  g++-compile-with-cmake:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: intall dependences
+      run: |
+           brew install openssl gnu-getopt coreutils gflags protobuf leveldb
+
+    - name: cmake
+      run: |
+           mkdir build
+           cd build
+           cmake ..
+      env:
+        CC: gcc-10
+        CXX: g++-10
+
+    - name: compile
+      run: |
+           cd build
+           make -j ${{env.proc_num}}
+
+  g++-compile-with-bazel:
+    runs-on: macos-latest # https://github.com/actions/runner-images
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: intall dependences
+      run: |
+           brew install openssl gnu-getopt coreutils gflags protobuf leveldb
+
+    - name: compile
+      run: |
+           bazel build -j ${{env.proc_num}} -c opt --copt -DHAVE_ZLIB=1 //...
+
+  g++-unittest:
+    runs-on: macos-latest # https://github.com/actions/runner-images
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: intall dependences
+      run: |
+           brew install openssl gnu-getopt coreutils gflags protobuf leveldb googletest
+
+    - name: config_brpc
+      run: |
+           GETOPT_PATH=$(find "/usr/local/Cellar/" -name "getopt" -type f -perm +111 -exec dirname {} \;)
+           export PATH=$GETOPT_PATH:$PATH
+           ./config_brpc.sh --header="/usr/local/include" --libs="/usr/local/lib"
+      env:
+        CC: gcc-10
+        CXX: g++-10
+
+    - name: compile
+      run: |
+           cd test
+           make -j ${{env.proc_num}}
+      env:
+        CC: gcc-10
+        CXX: g++-10
+
+    - name: test
+      run: |
+           cd test
+           sh run_tests.sh
+      env:
+        CC: gcc-10
+        CXX: g++-10
