@@ -22,6 +22,8 @@ jobs:
       run: |
            echo "arch:"
            uname -m
+           echo "clang version:"
+           clang --version
            brew install openssl gnu-getopt coreutils gflags protobuf leveldb googletest
 
     - name: unittest
