@@ -63,7 +63,7 @@ jobs:
 
     - name: compile
       run: |
-           bazel build -j ${{env.proc_num}} -c opt --copt -DHAVE_ZLIB=1 //...
+           bazel build -j ${{env.proc_num}} brpc
 
   unittest:
     runs-on: macos-latest
