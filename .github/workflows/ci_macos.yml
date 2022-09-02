@@ -62,12 +62,13 @@ jobs:
            bazel --version
            brew install openssl coreutils gflags protobuf leveldb
            brew install gnu-sed
-           SED_PATH=$(find "/usr/local/Cellar/" -name "sed" -exec dirname {} \;)
-           export PATH=$SED_PATH:$PATH
 
     - name: compile
       run: |
-           bazel build -j ${{env.proc_num}} brpc
+           SED_PATH=$(find "/usr/local/Cellar/" -name "sed" -exec dirname {} \;)
+           export PATH=$SED_PATH:$PATH
+           #bazel build -j ${{env.proc_num}} brpc
+           bazel build -j 12 brpc
 
   unittest:
     runs-on: macos-latest
