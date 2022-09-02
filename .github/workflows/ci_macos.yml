@@ -59,7 +59,8 @@ jobs:
     
     - name: install dependences
       run: |
-           brew install openssl gnu-getopt coreutils gflags protobuf leveldb
+          bazel --version
+          #brew install openssl gnu-getopt coreutils gflags protobuf leveldb
 
     - name: compile
       run: |
