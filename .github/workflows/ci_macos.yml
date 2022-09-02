@@ -52,7 +52,7 @@ jobs:
            make -j ${{env.proc_num}}
 
   compile-with-bazel:
-    runs-on: macos-latest
+    runs-on: macos-12
 
     steps:
     - uses: actions/checkout@v2
@@ -60,6 +60,7 @@ jobs:
     - name: install dependences
       run: |
           bazel --version
+          find / -name "bazel" 2> /dev/null
           #brew install openssl gnu-getopt coreutils gflags protobuf leveldb
 
     - name: compile
