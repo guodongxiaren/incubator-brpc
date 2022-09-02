@@ -52,7 +52,7 @@ jobs:
            make -j ${{env.proc_num}}
 
   compile-with-bazel:
-    runs-on: macos-12
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -60,13 +60,13 @@ jobs:
     - name: install dependences
       run: |
            bazel --version
+           brew install openssl coreutils gflags protobuf leveldb
            brew install gnu-sed
-          #brew install openssl gnu-getopt coreutils gflags protobuf leveldb
+           SED_PATH=$(find "/usr/local/Cellar/" -name "sed" -exec dirname {} \;)
+           export PATH=$SED_PATH:$PATH
 
     - name: compile
       run: |
-           SED_PATH=$(find "/usr/local/Cellar/" -name "sed" -exec dirname {} \;)
-           export PATH=$SED_PATH:$PATH
            bazel build -j ${{env.proc_num}} brpc
 
   unittest:
