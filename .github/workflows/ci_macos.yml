@@ -68,7 +68,7 @@ jobs:
            SED_PATH=$(find "/usr/local/Cellar/" -name "sed" -exec dirname {} \;)
            GETOPT_PATH=$(find "/usr/local/Cellar/" -name "getopt" -type f -perm +111 -exec dirname {} \;)
            export PATH=$GETOPT_PATH:$SED_PATH:$PATH
-           bazel build -j ${{env.proc_num}} brpc
+           bazel build  --sandbox_debug --verbose_failures -j ${{env.proc_num}} -c opt --copt -DHAVE_ZLIB=1 //...
            #bazel build -j 12 brpc
 
   unittest:
