@@ -60,13 +60,14 @@ jobs:
     - name: install dependences
       run: |
            bazel --version
-           brew install openssl coreutils gflags protobuf leveldb
-           brew install gnu-sed
+           #brew install openssl gnu-getopt coreutils gflags protobuf leveldb
+           brew install gnu-sed gnu-getopt coreutils
 
     - name: compile
       run: |
            SED_PATH=$(find "/usr/local/Cellar/" -name "sed" -exec dirname {} \;)
-           export PATH=$SED_PATH:$PATH
+           GETOPT_PATH=$(find "/usr/local/Cellar/" -name "getopt" -type f -perm +111 -exec dirname {} \;)
+           export PATH=$GETOPT_PATH:$SED_PATH:$PATH
            #bazel build -j ${{env.proc_num}} brpc
            bazel build -j 12 brpc
 
