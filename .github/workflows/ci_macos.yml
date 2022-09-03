@@ -61,15 +61,16 @@ jobs:
       run: |
            bazel --version
            #brew install openssl gnu-getopt coreutils gflags protobuf leveldb
-           brew install gnu-sed gnu-getopt coreutils
+           brew install gnu-sed gnu-getopt coreutils make
 
     - name: compile
       run: |
-           SED_PATH=$(find "/usr/local/Cellar/" -name "sed" -exec dirname {} \;)
-           GETOPT_PATH=$(find "/usr/local/Cellar/" -name "getopt" -type f -perm +111 -exec dirname {} \;)
-           export PATH=$GETOPT_PATH:$SED_PATH:$PATH
-           bazel build  --sandbox_debug --verbose_failures -j ${{env.proc_num}} -c opt --copt -DHAVE_ZLIB=1 //...
-           #bazel build -j 12 brpc
+          #SED_PATH=$(find "/usr/local/Cellar/" -name "sed" -exec dirname {} \;)
+          #GETOPT_PATH=$(find "/usr/local/Cellar/" -name "getopt" -type f -perm +111 -exec dirname {} \;)
+          #export PATH=$GETOPT_PATH:$SED_PATH:$PATH
+          export PATH=/usr/local/opt/gnu-sed/libexec/gnubin:/usr/local/opt/make/libexec/gnubin:/usr/local/opt/gnu-getopt/libexec/gnubin:$PATH
+          #bazel build  --sandbox_debug --verbose_failures -j ${{env.proc_num}} -c opt --copt -DHAVE_ZLIB=1 //...
+           bazel build --sandbox_debug --verbose_failures -j 12 brpc
 
   unittest:
     runs-on: macos-latest
