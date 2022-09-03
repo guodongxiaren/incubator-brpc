@@ -65,6 +65,9 @@ jobs:
 
     - name: compile
       run: |
+          export LDFLAGS="-L/usr/local/opt/openssl@3/lib"
+          export CPPFLAGS="-I/usr/local/opt/openssl@3/include"
+          export PKG_CONFIG_PATH="/usr/local/opt/openssl@3/lib/pkgconfig"
           #SED_PATH=$(find "/usr/local/Cellar/" -name "sed" -exec dirname {} \;)
           #GETOPT_PATH=$(find "/usr/local/Cellar/" -name "getopt" -type f -perm +111 -exec dirname {} \;)
           #export PATH=$GETOPT_PATH:$SED_PATH:$PATH
