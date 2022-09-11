@@ -40,6 +40,18 @@ config_setting(
 )
 
 alias(
+    name = "ssl",
+    actual = "openssl",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "crypto",
+    actual = "openssl",
+    visibility = ["//visibility:public"],
+)
+
+alias(
     name = "openssl",
     actual = select({
         ":msvc_compiler": "openssl_msvc",
