@@ -705,9 +705,9 @@ DEFINE_string(bvar_dump_exclude, "", "Dump bvar excluded from these wildcards, "
               "separated by semicolon(;), empty means no exclusion");
 DEFINE_string(bvar_dump_prefix, "<app>", "Every dumped name starts with this prefix");
 DEFINE_string(bvar_dump_tabs, "latency=*_latency*"
-                              "; qps=*_qps*"
-                              "; error=*_error*"
-                              "; system=*process_*,*malloc_*,*kernel_*",
+                              ";qps=*_qps*"
+                              ";error=*_error*"
+                              ";system=*process_*,*malloc_*,*kernel_*",
               "Dump bvar into different tabs according to the filters (seperated by semicolon), "
               "format: *(tab_name=wildcards;)");
 
@@ -920,11 +920,11 @@ const bool ALLOW_UNUSED dummy_bvar_dump_prefix = ::GFLAGS_NS::RegisterFlagValida
 const bool ALLOW_UNUSED dummy_bvar_dump_tabs = ::GFLAGS_NS::RegisterFlagValidator(
     &FLAGS_bvar_dump_tabs, wakeup_dumping_thread);
 
-const bool ALLOW_UNUSED dummy_mbvar_dump = ::google::RegisterFlagValidator(
+const bool ALLOW_UNUSED dummy_mbvar_dump = ::GFLAGS_NS::RegisterFlagValidator(
     &FLAGS_mbvar_dump, validate_bvar_dump);
-const bool ALLOW_UNUSED dummy_mbvar_dump_prefix = ::google::RegisterFlagValidator(
+const bool ALLOW_UNUSED dummy_mbvar_dump_prefix = ::GFLAGS_NS::RegisterFlagValidator(
     &FLAGS_mbvar_dump_prefix, wakeup_dumping_thread);
-const bool ALLOW_UNUSED dump_mbvar_dump_file = ::google::RegisterFlagValidator(
+const bool ALLOW_UNUSED dump_mbvar_dump_file = ::GFLAGS_NS::RegisterFlagValidator(
     &FLAGS_mbvar_dump_file, wakeup_dumping_thread);
 
 static bool validate_mbvar_dump_format(const char*, const std::string& format) {
@@ -940,7 +940,7 @@ static bool validate_mbvar_dump_format(const char*, const std::string& format) {
     return true;
 }
 
-const bool ALLOW_UNUSED dummy_mbvar_dump_format = ::google::RegisterFlagValidator(
+const bool ALLOW_UNUSED dummy_mbvar_dump_format = ::GFLAGS_NS::RegisterFlagValidator(
     &FLAGS_mbvar_dump_format, validate_mbvar_dump_format);
 
 void to_underscored_name(std::string* name, const butil::StringPiece& src) {
