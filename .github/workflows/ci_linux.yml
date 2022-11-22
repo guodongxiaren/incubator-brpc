@@ -7,6 +7,8 @@ on:
     branches: [ master ]
 
 env:
+  CXX: g++
+  CC: gcc
   proc_num: $(nproc)
 
 jobs:
@@ -21,7 +23,8 @@ jobs:
            sudo apt-get install -y git g++ make libssl-dev libgflags-dev libprotobuf-dev libprotoc-dev protobuf-compiler libleveldb-dev
     - name: config_brpc
       run: |
-           ./config_brpc.sh --header="/usr/local/include /usr/include" --libs="/usr/local/lib /usr/local/lib64 /usr/lib /usr/lib64" --with-thrift
+           ./config_brpc.sh --header="/usr/include" --libs="/usr/lib" --nodebugsymbols --cxx=${{env.CXX}} --cc=${{env.CC}}
+
     - name: compile
       run: |
            make -j ${{env.proc_num}}
@@ -45,6 +48,8 @@ jobs:
            cmake ..
     - name: compile
       run: |
+           export CC=${{env.CC}}
+           export CXX=${{env.CXX}}
            cd build
            make -j ${{env.proc_num}}
            
@@ -54,9 +59,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - name: install dependences
-      run: |
-           sudo apt-get install -y git g++ make libssl-dev libgflags-dev libprotobuf-dev libprotoc-dev protobuf-compiler libleveldb-dev
     - name: compile
       run: |
            bazel build -j ${{env.proc_num}} -c opt --copt -DHAVE_ZLIB=1 //...
