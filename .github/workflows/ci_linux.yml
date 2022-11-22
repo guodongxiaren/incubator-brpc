@@ -62,3 +62,57 @@ jobs:
     - name: compile
       run: |
            bazel build -j ${{env.proc_num}} -c opt --copt -DHAVE_ZLIB=1 //...
+
+  compile-with-make-all-options:
+    runs-on: ubuntu-latest # https://github.com/actions/runner-images
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: install dependences
+      run: |
+           sudo apt-get install -y git g++ make libssl-dev libgflags-dev libprotobuf-dev libprotoc-dev protobuf-compiler libleveldb-dev libgoogle-glog-dev
+           wget https://archive.apache.org/dist/thrift/0.11.0/thrift-0.11.0.tar.gz && tar -xf thrift-0.11.0.tar.gz && cd thrift-0.11.0/ && ./configure --prefix=/usr --with-rs=no --with-ruby=no --with-python=no --with-java=no --with-go=no --with-perl=no --with-php=no --with-csharp=no --with-erlang=no --with-lua=no --with-nodejs=no CXXFLAGS="-Wno-unused-variable" && make -j4 && sudo make install
+
+    - name: config_brpc
+      run: |
+           ./config_brpc.sh --header="/usr/include" --libs="/usr/lib" --nodebugsymbols --cxx=${{env.CXX}} --cc=${{env.CC}} --with-thrift --with-glog
+
+    - name: compile
+      run: |
+           make -j ${{env.proc_num}}
+    - name: make all examples
+      run: |
+           sh tools/make_all_examples
+           
+  compile-with-cmake-all-options:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: install dependences
+      run: |
+           sudo apt-get install -y git g++ make libssl-dev libgflags-dev libprotobuf-dev libprotoc-dev protobuf-compiler libleveldb-dev libgoogle-glog-dev
+           wget https://archive.apache.org/dist/thrift/0.11.0/thrift-0.11.0.tar.gz && tar -xf thrift-0.11.0.tar.gz && cd thrift-0.11.0/ && ./configure --prefix=/usr --with-rs=no --with-ruby=no --with-python=no --with-java=no --with-go=no --with-perl=no --with-php=no --with-csharp=no --with-erlang=no --with-lua=no --with-nodejs=no CXXFLAGS="-Wno-unused-variable" && make -j4 && sudo make install
+    - name: cmake 
+      run: |
+           mkdir build
+           cd build
+           cmake -DWITH_MESALINK=OFF -DWITH_GLOG=ON -DWITH_THRIFT=ON ..
+    - name: compile
+      run: |
+           export CC=${{env.CC}}
+           export CXX=${{env.CXX}}
+           cd build
+           make -j ${{env.proc_num}}
+           
+  compile-with-bazel-all-options:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: compile
+      run: |
+           bazel build -j 12 -c opt --define with_mesalink=false --define with_glog=true --define with_thrift=true --copt -DHAVE_ZLIB=1 //...
