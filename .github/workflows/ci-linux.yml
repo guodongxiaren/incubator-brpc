@@ -59,7 +59,7 @@ jobs:
     - uses: ./.github/actions/init-make-config
       with:
         options: --cc=gcc --cxx=g++ --with-thrift --with-glog
-    -name: test
+    - name: test
       run: |
            /usr/bin/protoc --cpp_out=./src --proto_path=./src --proto_path=/usr/include/ src/idl_options.proto
            find . -name "idl_options.pb.h"
