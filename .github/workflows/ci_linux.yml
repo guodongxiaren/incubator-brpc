@@ -7,8 +7,7 @@ on:
     branches: [ master ]
 
 env:
-  #proc_num: $(nproc)
-  proc_num: 12
+  proc_num: $(nproc)
 
 jobs:
   gcc-compile-with-make:
@@ -16,9 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: ./.github/actions/install-dependences
-    - name: config brpc
-      run: |
-           ./config_brpc.sh --header="/usr/local/include /usr/include" --libs="/usr/local/lib /usr/local/lib64 /usr/lib /usr/lib64"
+    - uses: ./.github/actions/init-make-config
     - name: compile
       run: |
            make -j ${{env.proc_num}}
@@ -55,9 +52,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: ./.github/actions/install-all-dependences
-    - name: config brpc
-      run: |
-           ./config_brpc.sh --header="/usr/local/include /usr/include" --libs="/usr/local/lib /usr/local/lib64 /usr/lib /usr/lib64" --with-thrift --with-glog --cxx=clang++ --cc=clang
+    - uses: ./.github/actions/init-make-config
+      with: --with-thrift --with-glog
     - name: compile
       run: |
            make -j ${{env.proc_num}}
@@ -138,9 +134,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: ./.github/actions/install-all-dependences
-    - name: config brpc
-      run: |
-           ./config_brpc.sh --header="/usr/local/include /usr/include" --libs="/usr/local/lib /usr/local/lib64 /usr/lib /usr/lib64" --with-thrift --with-glog --cxx=clang++ --cc=clang
+    - uses: ./.github/actions/init-make-config
+      with: --cc=clang --cxx=clang++ --with-thrift --with-glog
     - name: compile
       run: |
            make -j ${{env.proc_num}}
@@ -174,4 +169,4 @@ jobs:
       run: |
            export CC=clang
            export CXX=clang++
-           bazel build -j 12 -c opt --define with_mesalink=false --define with_glog=true --define with_thrift=true --copt -DHAVE_ZLIB=1 //...
+           bazel build -j ${{env.proc_num}} -c opt --define with_mesalink=false --define with_glog=true --define with_thrift=true --copt -DHAVE_ZLIB=1 //...
