@@ -2,9 +2,8 @@ inputs:
   options:
     description: extra options for config_brpc.sh
     required: false
-    default: --cc=gcc --cxx=g++
 runs:
   using: "composite"
   steps:
-    - run: sh -x config_brpc.sh --headers=/usr/include --libs=/usr/lib --nodebugsymbols ${{inputs.options}}
+    - run: sh config_brpc.sh --headers=/usr/include --libs=/usr/lib --nodebugsymbols ${{inputs.options}}
       shell: bash
