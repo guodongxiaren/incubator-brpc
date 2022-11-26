@@ -54,7 +54,7 @@ jobs:
     - uses: ./.github/actions/install-all-dependences
     - uses: ./.github/actions/init-make-config
       with:
-        options: --with-thrift --with-glog
+        options: --cc=gcc --cxx=g++ --with-thrift --with-glog
     - name: compile
       run: |
            make -j ${{env.proc_num}}
