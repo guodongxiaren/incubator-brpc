@@ -95,7 +95,7 @@ jobs:
            bazel build -j 12 -c opt --define with_mesalink=false --define with_glog=true --define with_thrift=true --copt -DHAVE_ZLIB=1 //...
   gcc-make-examples:
     runs-on: ubuntu-latest
-    needs: gcc-compile-with-make-options
+    needs: gcc-compile-with-make
     steps:
     - name: make all examples
       run: |
