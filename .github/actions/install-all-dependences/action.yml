@@ -1,6 +1,8 @@
 runs:
   using: "composite"
   steps:
+    - run: ulimit -c unlimited -S && sudo echo 'core.%e.%p' > /proc/sys/kernel/core_pattern
+      shell: bash
     - run: sudo apt-get install -y git g++ make libssl-dev libgflags-dev libprotobuf-dev libprotoc-dev protobuf-compiler libleveldb-dev libgoogle-perftools-dev libgoogle-glog-dev automake bison flex libboost-all-dev libevent-dev libtool pkg-config
       shell: bash
     - run: wget https://archive.apache.org/dist/thrift/0.11.0/thrift-0.11.0.tar.gz && tar -xf thrift-0.11.0.tar.gz
