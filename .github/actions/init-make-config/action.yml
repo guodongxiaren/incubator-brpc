@@ -1,0 +1,5 @@
+runs:
+  using: "composite"
+  steps:
+    - run: sh -x config_brpc.sh --headers=/usr/include --libs=/usr/lib --nodebugsymbols --cxx=$CXX --cc=$CC
+      shell: bash
