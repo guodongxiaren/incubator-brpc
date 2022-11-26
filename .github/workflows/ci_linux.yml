@@ -81,10 +81,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+    - uses: ${{github.action_path}}/install-dependences
     
-    - name: install dependences
-      run: |
-           sudo apt-get install -y git g++ make libssl-dev libgflags-dev libprotobuf-dev libprotoc-dev protobuf-compiler libleveldb-dev
     - name: cmake 
       run: |
            export CC=clang
