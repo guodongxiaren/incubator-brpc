@@ -20,8 +20,6 @@ jobs:
         options: --cc=gcc --cxx=g++
     - name: compile
       run: |
-           # TODO: 其实make过程中有这个protoc命令，但这里不单独执行一次，经常会导致mcpack2pb编译失败，后续再排查解决
-           #/usr/bin/protoc --cpp_out=./src --proto_path=./src --proto_path=/usr/include/ src/idl_options.proto
            make -j ${{env.proc_num}}
 
   gcc-compile-with-cmake:
@@ -63,24 +61,7 @@ jobs:
         options: --cc=gcc --cxx=g++ --with-thrift --with-glog
     - name: compile
       run: |
-           # TODO: 其实make过程中有这个protoc命令，但这里不单独执行一次，经常会导致mcpack2pb编译失败，后续再排查解决
-           #/usr/bin/protoc --cpp_out=./src --proto_path=./src --proto_path=/usr/include/ src/idl_options.proto
            make -j ${{env.proc_num}}
-
-  gcc-compile-all-example:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: ./.github/actions/install-all-dependences
-    - uses: ./.github/actions/init-make-config
-      with:
-        options: --cc=gcc --cxx=g++ --with_thrift
-    - name: compile
-      run: |
-           make -j ${{env.proc_num}}
-    - name: make all examples
-      run: |
-           sh tools/make_all_examples
 
   gcc-compile-with-cmake-all-options:
     runs-on: ubuntu-latest
@@ -164,21 +145,6 @@ jobs:
     - name: compile
       run: |
            make -j ${{env.proc_num}}
-
-  clang-compile-all-example:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: ./.github/actions/install-all-dependences
-    - uses: ./.github/actions/init-make-config
-      with:
-        options: --cc=clang --cxx=clang++ --with_thrift
-    - name: compile
-      run: |
-           make -j ${{env.proc_num}}
-    - name: make all examples
-      run: |
-           sh tools/make_all_examples
 
   clang-compile-with-cmake-all-options:
     runs-on: ubuntu-latest
