@@ -1,0 +1,99 @@
+name: Build and Test on Macos
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  proc_num: $(sysctl -n hw.logicalcpu)
+
+jobs:
+  compile-with-make:
+    runs-on: macos-latest # https://github.com/actions/runner-images
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: install dependences
+      run: |
+           brew install openssl gnu-getopt coreutils gflags protobuf leveldb
+
+    - name: config_brpc
+      run: |
+           GETOPT_PATH=$(find "/usr/local/Cellar/" -name "getopt" -type f -perm +111 -exec dirname {} \;)
+           export PATH=$GETOPT_PATH:$PATH
+           ./config_brpc.sh --header="/usr/local/include" --libs="/usr/local/lib"
+
+    - name: compile
+      run: |
+           make -j ${{env.proc_num}}
+
+  compile-with-cmake:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: install dependences
+      run: |
+           brew install openssl gnu-getopt coreutils gflags protobuf leveldb
+
+    - name: cmake
+      run: |
+           mkdir build
+           cd build
+           cmake ..
+
+    - name: compile
+      run: |
+           cd build
+           make -j ${{env.proc_num}}
+
+  compile-with-bazel:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: install dependences
+      run: |
+           bazel --version
+           #brew install openssl gnu-getopt coreutils gflags protobuf leveldb
+           brew install gnu-sed gnu-getopt coreutils make
+
+    - name: compile
+      run: |
+          #SED_PATH=$(find "/usr/local/Cellar/" -name "sed" -exec dirname {} \;)
+          #GETOPT_PATH=$(find "/usr/local/Cellar/" -name "getopt" -type f -perm +111 -exec dirname {} \;)
+          #export PATH=$GETOPT_PATH:$SED_PATH:$PATH
+          export PATH=/usr/local/opt/gnu-sed/libexec/gnubin:/usr/local/opt/make/libexec/gnubin:/usr/local/opt/gnu-getopt/libexec/gnubin:$PATH
+          #bazel build  --sandbox_debug --verbose_failures -j ${{env.proc_num}} -c opt --copt -DHAVE_ZLIB=1 //...
+           bazel build --sandbox_debug --verbose_failures -j 12 brpc
+
+  unittest:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: install dependences
+      run: |
+           brew install openssl gnu-getopt coreutils gflags protobuf leveldb googletest
+
+    - name: config_brpc
+      run: |
+           GETOPT_PATH=$(find "/usr/local/Cellar/" -name "getopt" -type f -perm +111 -exec dirname {} \;)
+           export PATH=$GETOPT_PATH:$PATH
+           ./config_brpc.sh --header="/usr/local/include" --libs="/usr/local/lib"
+
+    - name: compile
+      run: |
+           cd test
+           make -j ${{env.proc_num}}
+
+    - name: test
+      run: |
+           cd test
+           sh run_tests.sh
